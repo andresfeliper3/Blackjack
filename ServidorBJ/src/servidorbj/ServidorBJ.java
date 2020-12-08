@@ -80,10 +80,10 @@ public class ServidorBJ implements Runnable{
 
 	private void inicializarVariablesControlRonda() {
 		// TODO Auto-generated method stub
-    	 //Variables de control del juego.
+    	//Variables de control del juego.
 		
-		idJugadores = new String[LONGITUD_COLA]; //Jugadores en juego sin contar el dealer, clientes
-		valorManos = new int[LONGITUD_COLA + 1]; //3 jugadores y 1 dealer
+		idJugadores = new String[LONGITUD_COLA]; // Jugadores en juego sin contar el dealer, clientes
+		valorManos = new int[LONGITUD_COLA + 1]; // 3 jugadores y 1 dealer
 		
 		mazo = new Baraja();
 		Carta carta;

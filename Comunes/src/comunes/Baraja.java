@@ -33,8 +33,27 @@ public class Baraja {
 			   }
 		   }
 	   }
+	   asignarImagen();
    }
-   
+   private void asignarImagen() {   
+	   
+	    try {
+	    	int index=0;
+			BufferedImage imagenesCartas = ImageIO.read(new File("src/recursos/cards.png"));
+		    for(int i=0;i<=180;i+=60){
+		    	for(int j=0;j<=540;j+=45) {
+		    		mazo.get(index).setImagen(imagenesCartas.getSubimage(j, i, 45, 60));
+		    		index++;
+		    	}
+		    }
+	    
+	    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+  }
+
    public Carta getCarta() {
 	   int index = aleatorio.nextInt(mazoSize());
 	   Carta carta = mazo.get(index);

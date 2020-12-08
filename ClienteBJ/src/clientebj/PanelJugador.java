@@ -36,14 +36,14 @@ public class PanelJugador extends JPanel {
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
 		x=5;
 	    for(int i=0;i<manoJugador.size();i++) {
-	    	dibujoRecordar.add(new Recuerdo(manoJugador.get(i),x));
+	    	dibujoRecordar.add(new Recuerdo(manoJugador.get(i),x,manoJugador.get(i).getImagen()));
 	    	x+=27;
 	    }			
 	    repaint();
 	}
 	
 	public void pintarLaCarta (Carta carta) {
-		dibujoRecordar.add(new Recuerdo(carta,x));
+		dibujoRecordar.add(new Recuerdo(carta,x,carta.getImagen()));
 		x+=27;
 		repaint();
 	}
@@ -54,24 +54,32 @@ public class PanelJugador extends JPanel {
 		g.setFont(font);
 				
 		//pinta la mano inicial
-		for(int i=0;i<dibujoRecordar.size();i++) {
-			g.drawString(dibujoRecordar.get(i).getCartaRecordar(), dibujoRecordar.get(i).getxRecordar(),35);
-		}	
+//		for(int i=0;i<dibujoRecordar.size();i++) {
+//			g.drawString(dibujoRecordar.get(i).getCartaRecordar(), dibujoRecordar.get(i).getxRecordar(),35);
+//		}	
+		for(Recuerdo carta : dibujoRecordar) {
+			g.drawImage(carta.getImagenRecordar(), carta.getxRecordar(),20, this);
+		}
 	}
 	
 	private class Recuerdo{
 		private Carta cartaRecordar;
 		private int xRecordar;
+		private Image imagenRecordar;
 
-		public Recuerdo(Carta cartaRecordar, int xRecordar) {
+		public Recuerdo(Carta cartaRecordar, int xRecordar,Image ImagenRecordar) {
 			this.cartaRecordar = cartaRecordar;
 			this.xRecordar = xRecordar;
+			this.imagenRecordar=imagenRecordar;
 		}
 
 		public String getCartaRecordar() {
 			return cartaRecordar.toString();
 		}
-
+		public Image getImagenRecordar() {
+			return imagenRecordar;
+		}
+		
 		public int getxRecordar() {
 			return xRecordar;
 		}

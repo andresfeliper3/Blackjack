@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 public class Carta implements Serializable{
     private String valor;
     private String palo;
+    private Image imagen;
 	
     public Carta(String valor, String palo) {
 		this.valor = valor;
@@ -32,5 +33,12 @@ public class Carta implements Serializable{
 	
 	public String toString() {
 		return valor+palo;
+	}
+	public Image getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(Image imagen) {
+		this.imagen = imagen;
 	}
 }

@@ -68,7 +68,7 @@ public class BlackJackGUI extends JFrame {
 		public void actionPerformed(ActionEvent actionEvent) {
 			// TODO Auto-generated method stub
 			//mesa.pintarJugada();	
-			if(actionEvent.getSource()==pedir &&  seguir) {
+			if(actionEvent.getSource()==pedir && seguir) {
 				Carta carta = mazo.getCarta();
 				mesa.pintarJugada(carta);
 				seguir=false;
