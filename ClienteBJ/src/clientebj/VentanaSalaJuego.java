@@ -109,11 +109,11 @@ public class VentanaSalaJuego extends JInternalFrame {
 			pedir.setEnabled(turno);
 			plantar.setEnabled(turno);
 		}
-		
+		//Se llama cuando se crea la sala de juego por primera vez
 		public void pintarCartasInicio(DatosBlackJack datosRecibidos) {
-			if(datosRecibidos.getIdJugadores()[0].equals(yoId)) {
-				yo.pintarCartasInicio(datosRecibidos.getManoJugador1());
-				jugador2.pintarCartasInicio(datosRecibidos.getManoJugador2());
+			if(datosRecibidos.getIdJugadores()[0].equals(yoId)) {//Si soy yo
+				yo.pintarCartasInicio(datosRecibidos.getManoJugador1());//pinte cartas de inicio del jugador yo
+				jugador2.pintarCartasInicio(datosRecibidos.getManoJugador2());//pinte las cartas del jugador 2
 			}else {
 				yo.pintarCartasInicio(datosRecibidos.getManoJugador2());
 				jugador2.pintarCartasInicio(datosRecibidos.getManoJugador1());
@@ -122,10 +122,10 @@ public class VentanaSalaJuego extends JInternalFrame {
 			
 			areaMensajes.append(datosRecibidos.getMensaje()+"\n");
 		}
-		
+		//ver min 36
 		public void pintarTurno(DatosBlackJack datosRecibidos) {
 			areaMensajes.append(datosRecibidos.getMensaje()+"\n");	
-			ClienteBlackJack cliente = (ClienteBlackJack)this.getTopLevelAncestor();
+			ClienteBlackJack cliente = (ClienteBlackJack)this.getTopLevelAncestor();//
 			
 			if(datosRecibidos.getJugador().contentEquals(yoId)){
 				if(datosRecibidos.getJugadorEstado().equals("iniciar")) {

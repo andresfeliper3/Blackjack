@@ -5,19 +5,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class DatosBlackJack implements Serializable{
-	//nombres de jugadores
 	private String[] idJugadores;
-	//mano de cada jugador
 	private ArrayList<Carta> manoJugador1, manoJugador2, manoDealer;
-	//valor actual de la mano de caada jugador
 	private int[] valorManos;
-	//cuando un jugador pida una carta, es la que el server asigna
 	private Carta carta;
 	private String mensaje;
-	//jugador al que se le envía el mensaje y el estado
-	/* El cliente los usa para saber qué hacer con el objeto
-	 * cuando le llegue.
-	 * */
 	private String jugador,jugadorEstado;
 	
 	public String getJugador() {

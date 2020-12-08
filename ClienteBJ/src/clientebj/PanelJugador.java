@@ -32,16 +32,16 @@ public class PanelJugador extends JPanel {
 		bordes = BorderFactory.createTitledBorder(nombreJugador);
 		this.setBorder(bordes);
 	}
-	//Coloca las cartas de la mano en el arraylist de recuerdos
+	
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
-		x = 5;
+		x=5;
 	    for(int i=0;i<manoJugador.size();i++) {
 	    	dibujoRecordar.add(new Recuerdo(manoJugador.get(i),x));
 	    	x+=27;
 	    }			
 	    repaint();
 	}
-	//Pinta una carta particular
+	
 	public void pintarLaCarta (Carta carta) {
 		dibujoRecordar.add(new Recuerdo(carta,x));
 		x+=27;
@@ -57,9 +57,6 @@ public class PanelJugador extends JPanel {
 		for(int i=0;i<dibujoRecordar.size();i++) {
 			g.drawString(dibujoRecordar.get(i).getCartaRecordar(), dibujoRecordar.get(i).getxRecordar(),35);
 		}	
-		/* Dibujar la imagen de la misma forma ó
-		 * un obj carta completo y se trae la img
-		 * */
 	}
 	
 	private class Recuerdo{
