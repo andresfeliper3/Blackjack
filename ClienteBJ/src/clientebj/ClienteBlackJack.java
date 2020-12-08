@@ -43,11 +43,11 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	public static final int HEIGHT=360;
 	
 	//Constantes de conexión con el Servidor BlackJack
-	public static final int PUERTO=7377;
+	public static final int PUERTO=7370;
 	public static final String IP="127.0.0.1";
 	
 	//variables de control del juego
-	private String idYo, otroJugador;
+	private String idYo, otroJugador, ultimoJugador;
 	private boolean turno;
 	private DatosBlackJack datosRecibidos;
 	
@@ -86,7 +86,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		//Create Listeners objects
 		
 		//Create Control objects
-		turno=false;
+		turno = false;
 		//Set up JComponents
 	
 		this.setBackground(SystemColor.activeCaption);
@@ -108,7 +108,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	}
 	
 	public void setIdYo(String id) {
-		idYo=id;
+		idYo = id;
 	}
 	
 	private void mostrarMensajes(String mensaje) {
@@ -130,7 +130,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		
 		try {
 			//buscar el servidor
-			conexion = new Socket(IP,PUERTO);
+			conexion = new Socket(IP, PUERTO);
 			//obtener flujos E/S
 			out = new ObjectOutputStream(conexion.getOutputStream());
 			out.flush();
@@ -163,10 +163,15 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 				datosRecibidos = new DatosBlackJack();
 				datosRecibidos = (DatosBlackJack) in.readObject();
 				if(datosRecibidos.getIdJugadores()[0].equals(idYo)) {
-					otroJugador=datosRecibidos.getIdJugadores()[1];
-					turno=true;
-				}else {
-					otroJugador=datosRecibidos.getIdJugadores()[0];
+					otroJugador = datosRecibidos.getIdJugadores()[1];
+					ultimoJugador = datosRecibidos.getIdJugadores()[2];
+					turno = true;
+				} else if(datosRecibidos.getIdJugadores()[1].equals(idYo)){
+					otroJugador = datosRecibidos.getIdJugadores()[0];
+					ultimoJugador = datosRecibidos.getIdJugadores()[2];
+				} else { //Yo estoy en la posición 2
+					otroJugador = datosRecibidos.getIdJugadores()[0];
+					ultimoJugador = datosRecibidos.getIdJugadores()[1];
 				}
 				this.habilitarSalaJuego(datosRecibidos);
 			} catch (ClassNotFoundException | IOException e) {
@@ -206,7 +211,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 				// TODO Auto-generated method stub
 				ventanaEspera = (VentanaEspera)containerInternalFrames.getComponent(0);
 				ventanaEspera.cerrarSalaEspera();
-				ventanaSalaJuego = new VentanaSalaJuego(idYo,otroJugador);
+				ventanaSalaJuego = new VentanaSalaJuego(idYo, otroJugador, ultimoJugador);
 				ventanaSalaJuego.pintarCartasInicio(datosRecibidos);
 				adicionarInternalFrame(ventanaSalaJuego);
                 if(turno) {
