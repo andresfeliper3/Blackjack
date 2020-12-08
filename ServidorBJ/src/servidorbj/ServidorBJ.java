@@ -166,6 +166,7 @@ public class ServidorBJ implements Runnable{
     	try {
     		this.mostrarMensaje("Despertando al jugador 1 para que inicie el juego");
         	jugadores[0].setSuspendido(false);
+        	jugadores[1].setSuspendido(false);
         	esperarInicio.signalAll(); //POR QUÉ?
     	}catch(Exception e) {
     		
