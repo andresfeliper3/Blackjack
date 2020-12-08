@@ -34,17 +34,17 @@ public class PanelJugador extends JPanel {
 	}
 	
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
-		x=5;
+		x = 5;
 	    for(int i=0;i<manoJugador.size();i++) {
 	    	dibujoRecordar.add(new Recuerdo(manoJugador.get(i),x));
-	    	x+=27;
+	    	x += 27;
 	    }			
 	    repaint();
 	}
 	
 	public void pintarLaCarta (Carta carta) {
-		dibujoRecordar.add(new Recuerdo(carta,x));
-		x+=27;
+		dibujoRecordar.add(new Recuerdo(carta, x));
+		x += 27;
 		repaint();
 	}
 	
@@ -55,7 +55,8 @@ public class PanelJugador extends JPanel {
 				
 		//pinta la mano inicial
 		for(int i=0;i<dibujoRecordar.size();i++) {
-			g.drawString(dibujoRecordar.get(i).getCartaRecordar(), dibujoRecordar.get(i).getxRecordar(),35);
+			//g.drawString(dibujoRecordar.get(i).getCartaRecordar(), dibujoRecordar.get(i).getxRecordar(),35);
+			g.drawImage(dibujoRecordar.get(i).getImagenRecordar(), dibujoRecordar.get(i).getxRecordar(), 35, this);
 		}	
 	}
 	
@@ -74,6 +75,9 @@ public class PanelJugador extends JPanel {
 
 		public int getxRecordar() {
 			return xRecordar;
+		}
+		public Image getImagenRecordar() {
+			return cartaRecordar.getImagen();
 		}
 	}
 
