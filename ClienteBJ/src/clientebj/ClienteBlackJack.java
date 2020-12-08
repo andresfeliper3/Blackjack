@@ -216,8 +216,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			
 		});
 	}
-
-	private void cerrarConexion() {
+}
 		// TODO Auto-generated method stub
 		try {
 			in.close();
