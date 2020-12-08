@@ -26,7 +26,7 @@ import comunes.DatosBlackJack;
  */
 public class ServidorBJ implements Runnable{
 	//constantes para manejo de la conexion.
-	public static final int PUERTO=7370;
+	public static final int PUERTO=7377;
 	public static final String IP="127.0.0.1";
 	public static final int LONGITUD_COLA = 3;
 
@@ -535,7 +535,7 @@ public class ServidorBJ implements Runnable{
 				datosEnviar.setManoJugador3(manosJugadores.get(2));
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
-				datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
+				datosEnviar.setMensaje("Inicias "+idJugadores[2]+" tienes "+valorManos[2]);
 				enviarMensajeCliente(datosEnviar);
 				
 				iniciarRondaJuego(); //despertar al jugador 1 para iniciar el juego
@@ -600,12 +600,12 @@ public class ServidorBJ implements Runnable{
 			datosEnviar.setCarta(carta);
 			datosEnviar.setJugador("dealer");
 				
-			if(valorManos[2] <= 16) {
+			if(valorManos[3] <= 16) {
 				datosEnviar.setJugadorEstado("sigue");
 				datosEnviar.setMensaje("Dealer ahora tiene "+valorManos[3]);
 				mostrarMensaje("El dealer sigue jugando");
 			}else {
-				if(valorManos[2] > 21) {
+				if(valorManos[3] > 21) {
 					datosEnviar.setJugadorEstado("voló");
 					datosEnviar.setMensaje("Dealer ahora tiene "+valorManos[3]+" voló :(");
 					pedir = false;
