@@ -69,6 +69,7 @@ public class VentanaEntrada extends JInternalFrame {
 				cliente.setIdYo(nombreJugador.getText());
 				ventanaEspera = new VentanaEspera(nombreJugador.getText());
 				getContainerFrames().add(ventanaEspera);
+				//BUSCA AL SERVIDOR AL HACER CLICK
 				cliente.buscarServidor();
                 cerrarVentanaEntrada();
 			}	

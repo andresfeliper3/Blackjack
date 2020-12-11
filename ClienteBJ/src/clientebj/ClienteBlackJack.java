@@ -50,6 +50,8 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	private String idYo, otroJugador, ultimoJugador;
 	private boolean turno;
 	private DatosBlackJack datosRecibidos;
+	//Apuesta inicial
+	private int apuestaInicial = 10;
 	
 	//variables para manejar la conexión con el Servidor BlackJack
 	private Socket conexion;
@@ -134,6 +136,15 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		}
 	}
  
+	public void enviarApuestaServidor(int apuesta) {
+		try {
+			out.writeObject(apuesta);
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void buscarServidor() {
 		mostrarMensajes("Jugador buscando al servidor...");
 		
@@ -158,6 +169,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		//mandar nombre jugador
 		mostrarMensajes("Jugador envio nombre "+idYo);
 		enviarMensajeServidor(idYo);
+		enviarApuestaServidor(apuestaInicial);
 		//procesar comunicación con el ServidorBlackJack
 		iniciarHilo();	
 	}
@@ -171,6 +183,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			try {
 				datosRecibidos = new DatosBlackJack();
 				datosRecibidos = (DatosBlackJack) in.readObject();
+				//lee los datos con los que construye la mesa
 				if(datosRecibidos.getIdJugadores()[0].equals(idYo)) {
 					otroJugador = datosRecibidos.getIdJugadores()[1];
 					ultimoJugador = datosRecibidos.getIdJugadores()[2];

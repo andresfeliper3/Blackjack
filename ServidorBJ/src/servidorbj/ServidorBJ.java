@@ -160,7 +160,9 @@ public class ServidorBJ implements Runnable {
 		for (int i = 0; i < LONGITUD_COLA; i++) {
 			try {
 				conexionJugador = server.accept();// estar pendiente a que llegue un cliente
+				mostrarMensaje("Antes de crear el jugador " + i);
 				jugadores[i] = new Jugador(conexionJugador, i); // crea el hilo y lo agrega al arreglo de hilos
+				mostrarMensaje("Hizo conexión el indexJugador " + i);
 				manejadorHilos.execute(jugadores[i]); // Ejecutamos el hilo recién creado
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -410,6 +412,7 @@ public class ServidorBJ implements Runnable {
 		private ObjectOutputStream out;
 		private ObjectInputStream in;
 		private String entrada;
+		private int apuesta;
 
 		// variables de control
 		private int indexJugador;
@@ -439,15 +442,17 @@ public class ServidorBJ implements Runnable {
 		public void run() {
 			// TODO Auto-generated method stub
 			// procesar los mensajes eviados por el cliente
-
+			mostrarMensaje("Entró al run el indexJugador " + indexJugador);
 			// ver cual jugador es
 			if (indexJugador == 0) {
 				// es jugador 1, debe ponerse en espera a la llegada del otro jugador
 
 				try {
 					// guarda el nombre del primer jugador
+					mostrarMensaje("Jugador con indexJugador " + indexJugador + " va a esperar para leer");
 					idJugadores[0] = (String) in.readObject();// Recoger el nombre del jugador
-					mostrarMensaje("Hilo establecido con jugador (1) " + idJugadores[0]);
+					apuesta = (int) in.readObject();
+					mostrarMensaje("Hilo establecido con jugador (0) " + idJugadores[0] + " con apuesta " + apuesta);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -484,7 +489,7 @@ public class ServidorBJ implements Runnable {
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setMensaje("Inicias " + idJugadores[0] + " tienes " + valorManos[0]);
-				enviarMensajeCliente(datosEnviar);
+				enviarMensajeCliente(datosEnviar); //con esto construye la mesa
 				jugadorEnTurno = 0;
 			} else if (indexJugador == 1) {
 				// es jugador 2, debe ponerse en espera a la llegada del otro jugador
@@ -492,7 +497,8 @@ public class ServidorBJ implements Runnable {
 				try {
 					// guarda el nombre del primer jugador
 					idJugadores[1] = (String) in.readObject();// Recoger el nombre del jugador
-					mostrarMensaje("Hilo establecido con jugador (1) " + idJugadores[1]);
+					apuesta = (int) in.readObject();
+					mostrarMensaje("Hilo establecido con jugador (1) " + idJugadores[1] + " con apuesta " + apuesta);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -537,7 +543,8 @@ public class ServidorBJ implements Runnable {
 				// jugador 2 debe esperar su turno
 				try {
 					idJugadores[2] = (String) in.readObject();
-					mostrarMensaje("Hilo jugador (3)" + idJugadores[2]);
+					apuesta = (int) in.readObject();
+					mostrarMensaje("Hilo jugador (3)" + idJugadores[2] + " con apuesta " + apuesta);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
