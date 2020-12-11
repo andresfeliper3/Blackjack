@@ -6,9 +6,13 @@ import java.io.Serializable;
 import javax.swing.ImageIcon;
 
 public class Carta implements Serializable{
+	
+	public static final int WIDTH = 45;
+	public static final int HEIGHT = 60;
     private String valor;
     private String palo;
-    private Image imagen;
+    private transient Image imagen;
+    private int coordenadaX, coordenadaY;
 	
     public Carta(String valor, String palo) {
 		this.valor = valor;
@@ -31,6 +35,22 @@ public class Carta implements Serializable{
 		this.palo = palo;
 	}
 	
+	public int getCoordenadaX() {
+		return coordenadaX;
+	}
+
+	public void setCoordenadaX(int coordenadaX) {
+		this.coordenadaX = coordenadaX;
+	}
+
+	public int getCoordenadaY() {
+		return coordenadaY;
+	}
+
+	public void setCoordenadaY(int coordenadaY) {
+		this.coordenadaY = coordenadaY;
+	}
+
 	public String toString() {
 		return valor+palo;
 	}

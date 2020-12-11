@@ -144,7 +144,13 @@ public class VentanaSalaJuego extends JInternalFrame {
 		if (datosRecibidos.getJugador().equals(yoId)) {
 			// Si me manda "iniciar" activo botones
 			if (datosRecibidos.getJugadorEstado().equals("iniciar")) {
-				activarBotones(true);
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						activarBotones(true);
+					}
+				});
 			} // Si me manda "plantó" desactivo botones
 			else if (datosRecibidos.getJugadorEstado().equals("plantó")) {
 				cliente.setTurno(false);

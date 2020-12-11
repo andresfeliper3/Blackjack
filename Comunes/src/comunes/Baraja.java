@@ -9,6 +9,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 public class Baraja {
+   public static final String RUTA_FILE = "/recursos/cards.png";
    private ArrayList<Carta> mazo;
    private Random aleatorio;
    
@@ -33,25 +34,19 @@ public class Baraja {
 			   }
 		   }
 	   }
-	   asignarImagen();
+	   asignarCoordenadas();
    }
-   private void asignarImagen() {   
+   private void asignarCoordenadas() {   
 	   
-	    try {
 	    	int index=0;
-			BufferedImage imagenesCartas = ImageIO.read(new File("src/recursos/cards.png"));
-		    for(int i=0;i<=180;i+=60){
-		    	for(int j=0;j<=540;j+=45) {
-		    		mazo.get(index).setImagen(imagenesCartas.getSubimage(j, i, 45, 60));
+		    for(int j=0;j<=180;j+=60){
+		    	for(int i=0;i<=540;i+=45) {
+		    		mazo.get(index).setCoordenadaX(i);//Asigna la coordenada de corte en X de la carta
+		    		mazo.get(index).setCoordenadaY(j);//Asigna la coordenada de corte en Y de la carta
 		    		index++;
 		    	}
 		    }
-	    
-	    } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		    
   }
 
    public Carta getCarta() {
