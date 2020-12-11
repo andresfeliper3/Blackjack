@@ -24,7 +24,7 @@ public class VentanaEntrada extends JInternalFrame {
 	private Escucha escucha;
 	
 	public VentanaEntrada(ClienteBlackJack cliente) {
-		this.cliente=cliente;
+		this.cliente = cliente;
 		initInternalFrame();
 		
 		this.setTitle("Bienvenido a Black Jack");
