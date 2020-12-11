@@ -40,7 +40,7 @@ import comunes.DatosBlackJack;
 public class ClienteBlackJack extends JFrame implements Runnable{
 	//Constantes de Interfaz Grafica
 	public static final int WIDTH=670;
-	public static final int HEIGHT=360;
+	public static final int HEIGHT=550;
 	
 	//Constantes de conexión con el Servidor BlackJack
 	public static final int PUERTO=7377;
@@ -94,6 +94,15 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		containerInternalFrames.setOpaque(false);
 		this.setContentPane(containerInternalFrames);
 		adicionarInternalFrame(new VentanaEntrada(this));
+	}
+	
+	public int getDesktopWidth() {
+		
+		return containerInternalFrames.getWidth();
+	}
+	public int getDesktopHeight() {
+		
+		return containerInternalFrames.getHeight();
 	}
 	
 	public void adicionarInternalFrame(JInternalFrame nuevoInternalFrame) {
@@ -211,7 +220,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 				// TODO Auto-generated method stub
 				ventanaEspera = (VentanaEspera)containerInternalFrames.getComponent(0);
 				ventanaEspera.cerrarSalaEspera();
-				ventanaSalaJuego = new VentanaSalaJuego(idYo, otroJugador, ultimoJugador);
+				ventanaSalaJuego = new VentanaSalaJuego(idYo, otroJugador, ultimoJugador,getDesktopWidth(),getDesktopHeight());
 				ventanaSalaJuego.pintarCartasInicio(datosRecibidos);
 				adicionarInternalFrame(ventanaSalaJuego);
                 if(turno) {

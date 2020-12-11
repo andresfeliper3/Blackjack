@@ -32,7 +32,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 	// private DatosBlackJack datosRecibidos;
 	private Escucha escucha;
 
-	public VentanaSalaJuego(String yoId, String jugador2Id, String jugador3Id) {
+	public VentanaSalaJuego(String yoId, String jugador2Id, String jugador3Id,int desktop_Width,int desktop_height) {
 		this.yoId = yoId;
 		this.jugador2Id = jugador2Id;
 		this.jugador3Id = jugador3Id;
@@ -43,8 +43,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 		// default window settings
 		this.setTitle("Sala de juego BlackJack - Jugador: " + yoId);
 		this.pack();
-		this.setLocation((ClienteBlackJack.WIDTH - this.getWidth()) / 2,
-				(ClienteBlackJack.HEIGHT - this.getHeight()) / 2);
+		this.setLocation((desktop_Width/2) - this.getWidth()/2, (desktop_height/2) - this.getHeight()/2);
 		this.setResizable(false);
 		this.show();
 	}
@@ -105,7 +104,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 		panelBotones.add(plantar);
 
 		yoFull = new JPanel();
-		yoFull.setPreferredSize(new Dimension(206, 100));
+		yoFull.setPreferredSize(new Dimension(206, 180));
 		yoFull.add(panelYo);
 		yoFull.add(panelBotones);
 		add(yoFull, BorderLayout.WEST);

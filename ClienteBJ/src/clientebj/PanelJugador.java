@@ -21,7 +21,7 @@ import comunes.FileIO;
 public class PanelJugador extends JPanel {
 	//constantes de clase
 	private static final int ANCHO = 206;
-	private static final int ALTO = 89;
+	private static final int ALTO = 120;
 	
 	
 	//variables para control del graficado
