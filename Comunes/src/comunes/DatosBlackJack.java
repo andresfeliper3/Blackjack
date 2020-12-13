@@ -6,12 +6,20 @@ import java.util.Collections;
 
 public class DatosBlackJack implements Serializable{
 	private String[] idJugadores;
+	private int[] apuestasJugadores;
 	private ArrayList<Carta> manoJugador1, manoJugador2, manoJugador3, manoDealer;
 	private int[] valorManos;
 	private Carta carta;
 	private String mensaje;
 	private String jugador,jugadorEstado;
 	
+	
+	public int[] getApuestasJugadores() {
+		return apuestasJugadores;
+	}
+	public void setApuestasJugadores(int[] apuestasJugadores) {
+		this.apuestasJugadores = apuestasJugadores;
+	}
 	public String getJugador() {
 		return jugador;
 	}

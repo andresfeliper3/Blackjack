@@ -412,7 +412,7 @@ public class ServidorBJ implements Runnable {
 		private ObjectOutputStream out;
 		private ObjectInputStream in;
 		private String entrada;
-		private int apuesta;
+		private int[] apuesta = new int[4];
 
 		// variables de control
 		private int indexJugador;
@@ -451,7 +451,7 @@ public class ServidorBJ implements Runnable {
 					// guarda el nombre del primer jugador
 					mostrarMensaje("Jugador con indexJugador " + indexJugador + " va a esperar para leer");
 					idJugadores[0] = (String) in.readObject();// Recoger el nombre del jugador
-					apuesta = (int) in.readObject();
+					apuesta[0] = (int) in.readObject();
 					mostrarMensaje("Hilo establecido con jugador (0) " + idJugadores[0] + " con apuesta " + apuesta);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
@@ -486,6 +486,7 @@ public class ServidorBJ implements Runnable {
 				datosEnviar.setManoJugador1(manosJugadores.get(0));
 				datosEnviar.setManoJugador2(manosJugadores.get(1));
 				datosEnviar.setManoJugador3(manosJugadores.get(2));
+				datosEnviar.setApuestasJugadores(apuesta);
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setMensaje("Inicias " + idJugadores[0] + " tienes " + valorManos[0]);
@@ -497,7 +498,7 @@ public class ServidorBJ implements Runnable {
 				try {
 					// guarda el nombre del primer jugador
 					idJugadores[1] = (String) in.readObject();// Recoger el nombre del jugador
-					apuesta = (int) in.readObject();
+					apuesta[1] = (int) in.readObject();
 					mostrarMensaje("Hilo establecido con jugador (1) " + idJugadores[1] + " con apuesta " + apuesta);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
@@ -532,6 +533,7 @@ public class ServidorBJ implements Runnable {
 				datosEnviar.setManoJugador1(manosJugadores.get(0));
 				datosEnviar.setManoJugador2(manosJugadores.get(1));
 				datosEnviar.setManoJugador3(manosJugadores.get(2));
+				datosEnviar.setApuestasJugadores(apuesta);
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setMensaje("Inicias " + idJugadores[1] + " tienes " + valorManos[1]);
@@ -543,7 +545,7 @@ public class ServidorBJ implements Runnable {
 				// jugador 2 debe esperar su turno
 				try {
 					idJugadores[2] = (String) in.readObject();
-					apuesta = (int) in.readObject();
+					apuesta[2] = (int) in.readObject();
 					mostrarMensaje("Hilo jugador (3)" + idJugadores[2] + " con apuesta " + apuesta);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
@@ -559,6 +561,7 @@ public class ServidorBJ implements Runnable {
 				datosEnviar.setManoJugador1(manosJugadores.get(0));
 				datosEnviar.setManoJugador2(manosJugadores.get(1));
 				datosEnviar.setManoJugador3(manosJugadores.get(2));
+				datosEnviar.setApuestasJugadores(apuesta);
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setMensaje("Inicias " + idJugadores[2] + " tienes " + valorManos[2]);

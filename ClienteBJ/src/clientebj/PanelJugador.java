@@ -27,13 +27,15 @@ public class PanelJugador extends JPanel {
 	//variables para control del graficado
 	private ArrayList<Recuerdo> dibujoRecordar;
 	private int x;
+	private int apuestaJugador;
 	    
-	public PanelJugador(String nombreJugador) {
+	public PanelJugador(String nombreJugador, int apuestaJugador) {
 		//this.setBackground(Color.GREEN);
+		this.apuestaJugador = apuestaJugador;
 		dibujoRecordar = new ArrayList<Recuerdo>();
 		this.setPreferredSize(new Dimension(ANCHO,ALTO));
 		TitledBorder bordes;
-		bordes = BorderFactory.createTitledBorder(nombreJugador);
+		bordes = BorderFactory.createTitledBorder(nombreJugador + " $"+apuestaJugador);
 		this.setBorder(bordes);
 	}
 	

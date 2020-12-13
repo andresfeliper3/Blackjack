@@ -32,13 +32,13 @@ public class VentanaSalaJuego extends JInternalFrame {
 	// private DatosBlackJack datosRecibidos;
 	private Escucha escucha;
 
-	public VentanaSalaJuego(String yoId, String jugador2Id, String jugador3Id,int desktop_Width,int desktop_height) {
+	public VentanaSalaJuego(String yoId,int apuestaYo, String jugador2Id,int apuesta2, String jugador3Id, int apuesta3, int desktop_Width,int desktop_height) {
 		this.yoId = yoId;
 		this.jugador2Id = jugador2Id;
 		this.jugador3Id = jugador3Id;
 		// this.datosRecibidos=datosRecibidos;
 
-		initGUI();
+		initGUI(apuestaYo, apuesta2,apuesta3);
 
 		// default window settings
 		this.setTitle("Sala de juego BlackJack - Jugador: " + yoId);
@@ -48,7 +48,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 		this.show();
 	}
 
-	private void initGUI() {
+	private void initGUI(int apuestaYo,int apuesta2,int apuesta3) {
 		// TODO Auto-generated method stub
 		// set up JFrame Container y Layout
 
@@ -58,17 +58,17 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 		// Set up JComponents
 		panelDealer = new JPanel();
-		dealer = new PanelJugador("Dealer");
+		dealer = new PanelJugador("Dealer",99999);
 		panelDealer.add(dealer);
 		add(panelDealer, BorderLayout.NORTH);
 
 		panelJugador2 = new JPanel();
-		jugador2 = new PanelJugador(jugador2Id);
+		jugador2 = new PanelJugador(jugador2Id,apuesta2);
 		panelJugador2.add(jugador2);
 		add(panelJugador2, BorderLayout.EAST);
 
 		panelJugador3 = new JPanel();
-		jugador3 = new PanelJugador(jugador3Id);
+		jugador3 = new PanelJugador(jugador3Id,apuesta3);
 		panelJugador3.add(jugador3);
 		add(panelJugador3, BorderLayout.SOUTH);
 
@@ -90,7 +90,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 		panelYo = new JPanel();
 		panelYo.setLayout(new BorderLayout());
-		yo = new PanelJugador(yoId);
+		yo = new PanelJugador(yoId,apuestaYo);
 		panelYo.add(yo);
 
 		pedir = new JButton("Carta");

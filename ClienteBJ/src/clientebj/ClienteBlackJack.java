@@ -48,6 +48,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	
 	//variables de control del juego
 	private String idYo, otroJugador, ultimoJugador;
+	private int apuestasYo, apuestasOtroJugador, apuestasUltimoJugador;
 	private boolean turno;
 	private DatosBlackJack datosRecibidos;
 	//Apuesta inicial
@@ -185,15 +186,30 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 				datosRecibidos = (DatosBlackJack) in.readObject();
 				//lee los datos con los que construye la mesa
 				if(datosRecibidos.getIdJugadores()[0].equals(idYo)) {
+					apuestasYo = datosRecibidos.getApuestasJugadores()[0];
+					
 					otroJugador = datosRecibidos.getIdJugadores()[1];
+					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[1];
+					
 					ultimoJugador = datosRecibidos.getIdJugadores()[2];
+					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
 					turno = true;
 				} else if(datosRecibidos.getIdJugadores()[1].equals(idYo)){
+					apuestasYo = datosRecibidos.getApuestasJugadores()[1];
+					
 					otroJugador = datosRecibidos.getIdJugadores()[0];
+					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
+					
 					ultimoJugador = datosRecibidos.getIdJugadores()[2];
+					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
 				} else { //Yo estoy en la posición 2
+					apuestasYo = datosRecibidos.getApuestasJugadores()[2];
+					
 					otroJugador = datosRecibidos.getIdJugadores()[0];
+					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
+					
 					ultimoJugador = datosRecibidos.getIdJugadores()[1];
+					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[1];
 				}
 				this.habilitarSalaJuego(datosRecibidos);
 			} catch (ClassNotFoundException | IOException e) {
@@ -233,7 +249,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 				// TODO Auto-generated method stub
 				ventanaEspera = (VentanaEspera)containerInternalFrames.getComponent(0);
 				ventanaEspera.cerrarSalaEspera();
-				ventanaSalaJuego = new VentanaSalaJuego(idYo, otroJugador, ultimoJugador,getDesktopWidth(),getDesktopHeight());
+				ventanaSalaJuego = new VentanaSalaJuego(idYo,apuestasYo,otroJugador,apuestasOtroJugador,ultimoJugador,apuestasUltimoJugador,getDesktopWidth(),getDesktopHeight());
 				ventanaSalaJuego.pintarCartasInicio(datosRecibidos);
 				adicionarInternalFrame(ventanaSalaJuego);
                 if(turno) {
