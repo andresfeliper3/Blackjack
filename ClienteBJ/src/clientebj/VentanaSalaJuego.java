@@ -2,6 +2,7 @@ package clientebj;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -196,7 +197,14 @@ public class VentanaSalaJuego extends JInternalFrame {
 		ClienteBlackJack cliente = (ClienteBlackJack) this.getTopLevelAncestor();
 		cliente.enviarMensajeServidor(mensaje);
 	}
-
+	
+	public void cerrarVentanaSalaJuego() {
+		this.dispose();
+	}
+	public Container getContainerFrames() {
+		return this.getParent();
+	}
+    
 	private class Escucha implements ActionListener {
 
 		@Override

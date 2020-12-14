@@ -65,6 +65,8 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 	private VentanaEntrada ventanaEntrada;
 	private VentanaEspera ventanaEspera;
 	private VentanaSalaJuego ventanaSalaJuego;
+	
+	private boolean repetirRonda = true;
 
 	/**
 	 * Instantiates a new cliente black jack.
@@ -179,86 +181,93 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 
 	@Override
 	public void run() {
-		// datosRecibidos = new DatosBlackJack();
-		// TODO Auto-generated method stub
-		// mostrar bienvenida al jugador
-		try {
-			datosRecibidos = new DatosBlackJack();
-			datosRecibidos = (DatosBlackJack) in.readObject();
-			// lee los datos con los que construye la mesa
-			if (datosRecibidos.getIdJugadores()[0].equals(idYo)) {
-				apuestasYo = datosRecibidos.getApuestasJugadores()[0];
-
-				otroJugador = datosRecibidos.getIdJugadores()[1];
-				apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[1];
-
-				ultimoJugador = datosRecibidos.getIdJugadores()[2];
-				apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
-				turno = true;
-			} else if (datosRecibidos.getIdJugadores()[1].equals(idYo)) {
-				apuestasYo = datosRecibidos.getApuestasJugadores()[1];
-
-				otroJugador = datosRecibidos.getIdJugadores()[0];
-				apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
-
-				ultimoJugador = datosRecibidos.getIdJugadores()[2];
-				apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
-			} else { // Yo estoy en la posición 2
-				apuestasYo = datosRecibidos.getApuestasJugadores()[2];
-
-				otroJugador = datosRecibidos.getIdJugadores()[0];
-				apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
-
-				ultimoJugador = datosRecibidos.getIdJugadores()[1];
-				apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[1];
-
-			}
-
-			this.habilitarSalaJuego(datosRecibidos);
-		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// buscando nombre del OtroJugador
-
-		// procesar turnos
-
-		while (true) {
+		while(repetirRonda) {
+			// datosRecibidos = new DatosBlackJack();
+			// TODO Auto-generated method stub
+			// mostrar bienvenida al jugador
 			try {
 				datosRecibidos = new DatosBlackJack();
 				datosRecibidos = (DatosBlackJack) in.readObject();
-				
-				mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
-				mostrarMensajes(datosRecibidos.getJugador() + " " + datosRecibidos.getJugadorEstado());
-				
-				ventanaSalaJuego.pintarTurno(datosRecibidos);
-				
-				mostrarMensajes("El booleano enJuego recibido por cliente es " + datosRecibidos.isEnJuego());
-				mostrarMensajes("El mensaje es " + datosRecibidos.getMensaje());
-				
-				if (!datosRecibidos.isEnJuego()) {
-					
-					int opcion = JOptionPane.showConfirmDialog(null, "Desea jugar otra vez?", "Jugar otra ronda",
-							JOptionPane.YES_NO_OPTION);
+				// lee los datos con los que construye la mesa
+				if (datosRecibidos.getIdJugadores()[0].equals(idYo)) {
+					apuestasYo = datosRecibidos.getApuestasJugadores()[0];
 
-					if (opcion == JOptionPane.YES_OPTION) {
-						//REINICIAR JUEGO
-						JOptionPane.showMessageDialog(null, "Reiniciando juego");
-					} else {
-						// Cerra todo
-					}
+					otroJugador = datosRecibidos.getIdJugadores()[1];
+					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[1];
+
+					ultimoJugador = datosRecibidos.getIdJugadores()[2];
+					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
+					turno = true;
+				} else if (datosRecibidos.getIdJugadores()[1].equals(idYo)) {
+					apuestasYo = datosRecibidos.getApuestasJugadores()[1];
+
+					otroJugador = datosRecibidos.getIdJugadores()[0];
+					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
+
+					ultimoJugador = datosRecibidos.getIdJugadores()[2];
+					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
+				} else { // Yo estoy en la posición 2
+					apuestasYo = datosRecibidos.getApuestasJugadores()[2];
+
+					otroJugador = datosRecibidos.getIdJugadores()[0];
+					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
+
+					ultimoJugador = datosRecibidos.getIdJugadores()[1];
+					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[1];
+
 				}
 
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
+				this.habilitarSalaJuego(datosRecibidos);
+			} catch (ClassNotFoundException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			// buscando nombre del OtroJugador
+
+			// procesar turnos
+
+			while (true) {
+				try {
+					datosRecibidos = new DatosBlackJack();
+					datosRecibidos = (DatosBlackJack) in.readObject();
+					
+					mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
+					mostrarMensajes(datosRecibidos.getJugador() + " " + datosRecibidos.getJugadorEstado());
+					
+					ventanaSalaJuego.pintarTurno(datosRecibidos);
+					
+					mostrarMensajes("El booleano enJuego recibido por cliente es " + datosRecibidos.isEnJuego());
+					mostrarMensajes("El mensaje es " + datosRecibidos.getMensaje());
+					
+					if (!datosRecibidos.isEnJuego()) {
+						
+						int opcion = JOptionPane.showConfirmDialog(this, "Desea jugar otra vez?", "Jugar otra ronda",
+								JOptionPane.YES_NO_OPTION);
+						
+						if (opcion == JOptionPane.YES_OPTION) {
+							//REINICIAR JUEGO
+							ventanaSalaJuego.cerrarVentanaSalaJuego();
+							ventanaEspera = new VentanaEspera(idYo);
+							add(ventanaEspera);
+							repetirRonda = true;
+							
+						} else {
+							// Cerra todo
+							repetirRonda = false;
+						}
+					}
+
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
 
 		}
-
 	}
 
 	private void habilitarSalaJuego(DatosBlackJack datosRecibidos) {
