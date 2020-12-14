@@ -179,8 +179,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	public void run() {
 		//datosRecibidos = new DatosBlackJack();
 		// TODO Auto-generated method stub
-		//mostrar bienvenida al jugador	
-		   
+		//mostrar bienvenida al jugador
 			try {
 				datosRecibidos = new DatosBlackJack();
 				datosRecibidos = (DatosBlackJack) in.readObject();
@@ -210,7 +209,9 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 					
 					ultimoJugador = datosRecibidos.getIdJugadores()[1];
 					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[1];
+	
 				}
+				
 				this.habilitarSalaJuego(datosRecibidos);
 			} catch (ClassNotFoundException | IOException e) {
 				// TODO Auto-generated catch block
