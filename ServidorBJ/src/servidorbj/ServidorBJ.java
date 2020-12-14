@@ -147,7 +147,7 @@ public class ServidorBJ implements Runnable {
 		
 		if(mano.size()==2 && valorManos[i] == 21) {//Guarda si el jugador tiene un Black Jack, es decir un As, y una J, Q, K
 			
-			estadosJugadores[i] = "BlackJack";
+			estadosJugadores[i] = "blackJack";
 			
 		}else {
 			
@@ -226,17 +226,20 @@ public class ServidorBJ implements Runnable {
 	private void analizarMensaje(String entrada, int indexJugador) {
 		// TODO Auto-generated method stub
 		// garantizar que solo se analice la petición del jugador en turno.
+		mostrarMensaje("jugador " +idJugadores[indexJugador] + "entró a analizarMensaje, " + entrada);
 		while (indexJugador != jugadorEnTurno) {
+			
 			bloqueoJuego.lock();
 			try {
+				mostrarMensaje("jugador " +idJugadores[indexJugador] + "Se echó a mimir");
 				esperarTurno.await();
+				mostrarMensaje("jugador " +idJugadores[indexJugador] + "Se despertó");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			bloqueoJuego.unlock();
 		}
-
 		// valida turnos para jugador 0 o 1
 
 		if (entrada.equals("pedir")) {
@@ -292,6 +295,7 @@ public class ServidorBJ implements Runnable {
 						jugadorEnTurno++;
 					} finally {
 						bloqueoJuego.unlock();
+						determinarRondaJuego(indexJugador);
 					}
 				} else if (jugadorEnTurno == 1) {
 					datosEnviar = new DatosBlackJack();
@@ -316,6 +320,7 @@ public class ServidorBJ implements Runnable {
 						jugadorEnTurno++;
 					} finally {
 						bloqueoJuego.unlock();
+						determinarRondaJuego(indexJugador);
 					}
 				} else {// era el jugador 3 entonces se debe iniciar el dealer
 						// notificar a todos que le toca jugar al dealer
@@ -331,6 +336,7 @@ public class ServidorBJ implements Runnable {
 					jugadores[2].enviarMensajeCliente(datosEnviar);
 
 					iniciarDealer();
+					determinarRondaJuego(indexJugador);
 				}
 			} else {// jugador no se pasa de 21 puede seguir jugando
 				datosEnviar.setCarta(carta);
@@ -379,6 +385,7 @@ public class ServidorBJ implements Runnable {
 					jugadorEnTurno++;
 				} finally {
 					bloqueoJuego.unlock();
+					determinarRondaJuego(indexJugador);
 				}
 			} else if (jugadorEnTurno == 1) {
 
@@ -402,6 +409,7 @@ public class ServidorBJ implements Runnable {
 					jugadorEnTurno++;
 				} finally {
 					bloqueoJuego.unlock();
+					determinarRondaJuego(indexJugador);
 				}
 			} else {
 				// notificar a todos que le toca jugar al dealer
@@ -418,13 +426,30 @@ public class ServidorBJ implements Runnable {
 				
 				
 				iniciarDealer();
+				determinarRondaJuego(indexJugador);
 			}
 		}
 	}
 	
-	private void determinarRondaJuego() {
+	private void determinarRondaJuego(int indexJugador) {
         mostrarMensaje("Entró a determinarRonda");
         datosEnviar = new DatosBlackJack();
+        
+		while (indexJugador != 3) {
+			
+			bloqueoJuego.lock();
+			try {
+				mostrarMensaje("jugador " +idJugadores[indexJugador] + "Se echó a mimir en determinar ronda juego");
+				finalizar.await();
+				mostrarMensaje("jugador " +idJugadores[indexJugador] + "Se despertó en determinar ronda juego");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			bloqueoJuego.unlock();
+		} 
+        //if
+        
         /*
          * EMPATE Ambos blackjack Ambos mismo valor Ambos pierden3
          */
@@ -465,13 +490,10 @@ public class ServidorBJ implements Runnable {
             jugadores[i].enviarMensajeCliente(datosEnviar);
         }
         
-        int opcion = JOptionPane.showConfirmDialog(null, "Desea jugar otra vez?", "Jugar otra ronda",JOptionPane.YES_NO_OPTION);
-        
-        if(opcion == JOptionPane.YES_OPTION) {
-        	//reiniciarJuego();
-        }else {
-        	//Cerrar todo
-        }
+        	datosEnviar.setEnJuego(false);
+        	//finalizar.signalAll();
+        	//Dealer despierta los hilos.
+
     
     }
 
@@ -559,8 +581,8 @@ public class ServidorBJ implements Runnable {
 				// ya se conectaron todos los jugadores
 				// le manda al jugador 1 todos los datos para montar la sala de Juego
 				// le toca el turno a jugador 1
-
 				mostrarMensaje("manda al jugador 1 todos los datos para montar SalaJuego");
+				datosEnviar.setEnJuego(true);
 				datosEnviar = new DatosBlackJack();
 				datosEnviar.setManoDealer(manosJugadores.get(3));
 				datosEnviar.setManoJugador1(manosJugadores.get(0));
@@ -668,6 +690,7 @@ public class ServidorBJ implements Runnable {
 
 			while (!seTerminoRonda()) {
 				try {
+					
 					entrada = (String) in.readObject();
 					analizarMensaje(entrada, indexJugador);
 				} catch (ClassNotFoundException e) {
@@ -718,6 +741,7 @@ public class ServidorBJ implements Runnable {
 			} else {
 				if (valorManos[3] > 21) {
 					datosEnviar.setJugadorEstado("voló");
+					estadosJugadores[3] = "voló";
 					datosEnviar.setMensaje("Dealer ahora tiene " + valorManos[3] + " voló :(");
 					pedir = false;
 					mostrarMensaje("El dealer voló");
@@ -736,7 +760,7 @@ public class ServidorBJ implements Runnable {
 			jugadores[2].enviarMensajeCliente(datosEnviar);
 			
 		} // fin while
-		determinarRondaJuego();
+		determinarRondaJuego(3);
 	
 
 	}

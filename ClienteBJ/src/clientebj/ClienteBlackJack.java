@@ -22,6 +22,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -229,6 +230,15 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 					mostrarMensajes(datosRecibidos.getJugador()+" "+datosRecibidos.getJugadorEstado());
 	              
 					ventanaSalaJuego.pintarTurno(datosRecibidos);
+					
+					/*
+					 * if(!datosRecibidos.isEnJuego()) { int opcion =
+					 * JOptionPane.showConfirmDialog(null, "Desea jugar otra vez?",
+					 * "Jugar otra ronda",JOptionPane.YES_NO_OPTION);
+					 * 
+					 * if(opcion == JOptionPane.YES_OPTION) { //reiniciarJuego(); }else { //Cerrar
+					 * todo } }
+					 */
 					
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
