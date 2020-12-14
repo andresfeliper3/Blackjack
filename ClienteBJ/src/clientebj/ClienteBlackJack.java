@@ -35,44 +35,44 @@ import comunes.DatosBlackJack;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ClienteBlackJack. 
+ * The Class ClienteBlackJack.
  * 
  */
-public class ClienteBlackJack extends JFrame implements Runnable{
-	//Constantes de Interfaz Grafica
-	public static final int WIDTH=670;
-	public static final int HEIGHT=550;
-	
-	//Constantes de conexión con el Servidor BlackJack
-	public static final int PUERTO=7377;
-	public static final String IP="127.0.0.1";
-	
-	//variables de control del juego
+public class ClienteBlackJack extends JFrame implements Runnable {
+	// Constantes de Interfaz Grafica
+	public static final int WIDTH = 670;
+	public static final int HEIGHT = 550;
+
+	// Constantes de conexión con el Servidor BlackJack
+	public static final int PUERTO = 7377;
+	public static final String IP = "127.0.0.1";
+
+	// variables de control del juego
 	private String idYo, otroJugador, ultimoJugador;
 	private int apuestasYo, apuestasOtroJugador, apuestasUltimoJugador;
 	private boolean turno;
 	private DatosBlackJack datosRecibidos;
-	//Apuesta inicial
+	// Apuesta inicial
 	private int apuestaInicial = 10;
-	
-	//variables para manejar la conexión con el Servidor BlackJack
+
+	// variables para manejar la conexión con el Servidor BlackJack
 	private Socket conexion;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	
-	//Componentes Graficos
+
+	// Componentes Graficos
 	private JDesktopPane containerInternalFrames;
 	private VentanaEntrada ventanaEntrada;
 	private VentanaEspera ventanaEspera;
 	private VentanaSalaJuego ventanaSalaJuego;
-	
+
 	/**
 	 * Instantiates a new cliente black jack.
 	 */
 	public ClienteBlackJack() {
 		initGUI();
-		
-		//default window settings
+
+		// default window settings
 		this.setTitle("Juego BlackJack");
 		this.setSize(WIDTH, HEIGHT);
 		this.setLocationRelativeTo(null);
@@ -80,54 +80,55 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
+
 	/**
 	 * Inits the GUI.
 	 */
 	private void initGUI() {
-		//set up JFrame Container y Layout
-        
-		//Create Listeners objects
-		
-		//Create Control objects
+		// set up JFrame Container y Layout
+
+		// Create Listeners objects
+
+		// Create Control objects
 		turno = false;
-		//Set up JComponents
-	
+		// Set up JComponents
+
 		this.setBackground(SystemColor.activeCaption);
 		containerInternalFrames = new JDesktopPane();
 		containerInternalFrames.setOpaque(false);
 		this.setContentPane(containerInternalFrames);
 		adicionarInternalFrame(new VentanaEntrada(this));
 	}
-	
+
 	public int getDesktopWidth() {
-		
+
 		return containerInternalFrames.getWidth();
 	}
+
 	public int getDesktopHeight() {
-		
+
 		return containerInternalFrames.getHeight();
 	}
-	
+
 	public void adicionarInternalFrame(JInternalFrame nuevoInternalFrame) {
 		add(nuevoInternalFrame);
 	}
-	
+
 	public void iniciarHilo() {
 		ExecutorService hiloCliente = Executors.newFixedThreadPool(1);
 		hiloCliente.execute(this);
-		//Thread hilo = new Thread(this);
-		//hilo.start();
+		// Thread hilo = new Thread(this);
+		// hilo.start();
 	}
-	
+
 	public void setIdYo(String id) {
 		idYo = id;
 	}
-	
+
 	private void mostrarMensajes(String mensaje) {
 		System.out.println(mensaje);
 	}
-	
+
 	public void enviarMensajeServidor(String mensaje) {
 		try {
 			out.writeObject(mensaje);
@@ -137,7 +138,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			e.printStackTrace();
 		}
 	}
- 
+
 	public void enviarApuestaServidor(int apuesta) {
 		try {
 			out.writeObject(apuesta);
@@ -147,18 +148,18 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			e.printStackTrace();
 		}
 	}
+
 	public void buscarServidor() {
 		mostrarMensajes("Jugador buscando al servidor...");
-		
+
 		try {
-			//buscar el servidor
+			// buscar el servidor
 			conexion = new Socket(IP, PUERTO);
-			//obtener flujos E/S
+			// obtener flujos E/S
 			out = new ObjectOutputStream(conexion.getOutputStream());
 			out.flush();
 			in = new ObjectInputStream(conexion.getInputStream());
-			
-			
+
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -168,88 +169,96 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		}
 		mostrarMensajes("Jugador conectado al servidor");
 		mostrarMensajes("Jugador estableció Flujos E/S");
-		//mandar nombre jugador
-		mostrarMensajes("Jugador envio nombre "+idYo);
+		// mandar nombre jugador
+		mostrarMensajes("Jugador envio nombre " + idYo);
 		enviarMensajeServidor(idYo);
 		enviarApuestaServidor(apuestaInicial);
-		//procesar comunicación con el ServidorBlackJack
-		iniciarHilo();	
+		// procesar comunicación con el ServidorBlackJack
+		iniciarHilo();
 	}
-	
+
 	@Override
 	public void run() {
-		//datosRecibidos = new DatosBlackJack();
+		// datosRecibidos = new DatosBlackJack();
 		// TODO Auto-generated method stub
-		//mostrar bienvenida al jugador
+		// mostrar bienvenida al jugador
+		try {
+			datosRecibidos = new DatosBlackJack();
+			datosRecibidos = (DatosBlackJack) in.readObject();
+			// lee los datos con los que construye la mesa
+			if (datosRecibidos.getIdJugadores()[0].equals(idYo)) {
+				apuestasYo = datosRecibidos.getApuestasJugadores()[0];
+
+				otroJugador = datosRecibidos.getIdJugadores()[1];
+				apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[1];
+
+				ultimoJugador = datosRecibidos.getIdJugadores()[2];
+				apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
+				turno = true;
+			} else if (datosRecibidos.getIdJugadores()[1].equals(idYo)) {
+				apuestasYo = datosRecibidos.getApuestasJugadores()[1];
+
+				otroJugador = datosRecibidos.getIdJugadores()[0];
+				apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
+
+				ultimoJugador = datosRecibidos.getIdJugadores()[2];
+				apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
+			} else { // Yo estoy en la posición 2
+				apuestasYo = datosRecibidos.getApuestasJugadores()[2];
+
+				otroJugador = datosRecibidos.getIdJugadores()[0];
+				apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
+
+				ultimoJugador = datosRecibidos.getIdJugadores()[1];
+				apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[1];
+
+			}
+
+			this.habilitarSalaJuego(datosRecibidos);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// buscando nombre del OtroJugador
+
+		// procesar turnos
+
+		while (true) {
 			try {
 				datosRecibidos = new DatosBlackJack();
 				datosRecibidos = (DatosBlackJack) in.readObject();
-				//lee los datos con los que construye la mesa
-				if(datosRecibidos.getIdJugadores()[0].equals(idYo)) {
-					apuestasYo = datosRecibidos.getApuestasJugadores()[0];
-					
-					otroJugador = datosRecibidos.getIdJugadores()[1];
-					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[1];
-					
-					ultimoJugador = datosRecibidos.getIdJugadores()[2];
-					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
-					turno = true;
-				} else if(datosRecibidos.getIdJugadores()[1].equals(idYo)){
-					apuestasYo = datosRecibidos.getApuestasJugadores()[1];
-					
-					otroJugador = datosRecibidos.getIdJugadores()[0];
-					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
-					
-					ultimoJugador = datosRecibidos.getIdJugadores()[2];
-					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
-				} else { //Yo estoy en la posición 2
-					apuestasYo = datosRecibidos.getApuestasJugadores()[2];
-					
-					otroJugador = datosRecibidos.getIdJugadores()[0];
-					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
-					
-					ultimoJugador = datosRecibidos.getIdJugadores()[1];
-					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[1];
-	
-				}
 				
-				this.habilitarSalaJuego(datosRecibidos);
-			} catch (ClassNotFoundException | IOException e) {
+				mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
+				mostrarMensajes(datosRecibidos.getJugador() + " " + datosRecibidos.getJugadorEstado());
+				
+				ventanaSalaJuego.pintarTurno(datosRecibidos);
+				
+				mostrarMensajes("El booleano enJuego recibido por cliente es " + datosRecibidos.isEnJuego());
+				mostrarMensajes("El mensaje es " + datosRecibidos.getMensaje());
+				
+				if (!datosRecibidos.isEnJuego()) {
+					
+					int opcion = JOptionPane.showConfirmDialog(null, "Desea jugar otra vez?", "Jugar otra ronda",
+							JOptionPane.YES_NO_OPTION);
+
+					if (opcion == JOptionPane.YES_OPTION) {
+						//REINICIAR JUEGO
+						JOptionPane.showMessageDialog(null, "Reiniciando juego");
+					} else {
+						// Cerra todo
+					}
+				}
+
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//buscando nombre del OtroJugador
-			
-			//procesar turnos
-			
-			while(true) {
-				try {
-					datosRecibidos = new DatosBlackJack();
-					datosRecibidos = (DatosBlackJack)in.readObject();
-					mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
-					mostrarMensajes(datosRecibidos.getJugador()+" "+datosRecibidos.getJugadorEstado());
-	              
-					ventanaSalaJuego.pintarTurno(datosRecibidos);
-					
-					/*
-					 * if(!datosRecibidos.isEnJuego()) { int opcion =
-					 * JOptionPane.showConfirmDialog(null, "Desea jugar otra vez?",
-					 * "Jugar otra ronda",JOptionPane.YES_NO_OPTION);
-					 * 
-					 * if(opcion == JOptionPane.YES_OPTION) { //reiniciarJuego(); }else { //Cerrar
-					 * todo } }
-					 */
-					
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}
-		
+
+		}
+
 	}
 
 	private void habilitarSalaJuego(DatosBlackJack datosRecibidos) {
@@ -258,19 +267,20 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				ventanaEspera = (VentanaEspera)containerInternalFrames.getComponent(0);
+				ventanaEspera = (VentanaEspera) containerInternalFrames.getComponent(0);
 				ventanaEspera.cerrarSalaEspera();
-				ventanaSalaJuego = new VentanaSalaJuego(idYo,apuestasYo,otroJugador,apuestasOtroJugador,ultimoJugador,apuestasUltimoJugador,getDesktopWidth(),getDesktopHeight());
+				ventanaSalaJuego = new VentanaSalaJuego(idYo, apuestasYo, otroJugador, apuestasOtroJugador,
+						ultimoJugador, apuestasUltimoJugador, getDesktopWidth(), getDesktopHeight());
 				ventanaSalaJuego.pintarCartasInicio(datosRecibidos);
 				adicionarInternalFrame(ventanaSalaJuego);
-                if(turno) {
-                	ventanaSalaJuego.activarBotones(turno);
-                }
+				if (turno) {
+					ventanaSalaJuego.activarBotones(turno);
+				}
 			}
-			
+
 		});
 	}
-		
+
 	private void cerrarConexion() {
 		// TODO Auto-generated method stub
 		try {
@@ -281,10 +291,10 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
 	}
-  
+
 	public void setTurno(boolean turno) {
-		this.turno=turno;
-	}	
+		this.turno = turno;
+	}
 }

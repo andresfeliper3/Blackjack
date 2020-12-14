@@ -12,7 +12,7 @@ public class DatosBlackJack implements Serializable{
 	private Carta carta;
 	private String mensaje;
 	private String jugador,jugadorEstado;
-	private boolean enJuego;
+	private boolean enJuego = true;
 	
 	
 	public boolean isEnJuego() {

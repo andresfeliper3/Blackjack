@@ -139,33 +139,36 @@ public class ServidorBJ implements Runnable {
 				valorManos[i] += Integer.parseInt(carta.getValor());
 			}
 		}
-		//Revisar si tiene una carta As, su valor puede variar
+		// Revisar si tiene una carta As, su valor puede variar
 		if (contieneAs(mano) && valorManos[i] > 21) {
-			
-			revisarAsMano(mano,i);
+
+			revisarAsMano(mano, i);
 		}
-		
-		if(mano.size()==2 && valorManos[i] == 21) {//Guarda si el jugador tiene un Black Jack, es decir un As, y una J, Q, K
-			
+
+		if (mano.size() == 2 && valorManos[i] == 21) {// Guarda si el jugador tiene un Black Jack, es decir un As, y una
+														// J, Q, K
+
 			estadosJugadores[i] = "blackJack";
-			
-		}else {
-			
+
+		} else {
+
 			estadosJugadores[i] = "normal";
 		}
 	}
-	//Analizar cuántos cambios de As debe hacer
-	private void revisarAsMano(ArrayList<Carta> mano,int i) {
-		
-			for(int j=0;j<mano.size();j++) {
-				if(mano.get(j).getValor().equals("As") ) {
-					if(valorManos[i] > 21 && !mano.get(j).isValorCambiado()) {
-						mano.get(j).setValorCambiado(true);
-						valorManos[i] -= 10;
-					}
+
+	// Analizar cuántos cambios de As debe hacer
+	private void revisarAsMano(ArrayList<Carta> mano, int i) {
+
+		for (int j = 0; j < mano.size(); j++) {
+			if (mano.get(j).getValor().equals("As")) {
+				if (valorManos[i] > 21 && !mano.get(j).isValorCambiado()) {
+					mano.get(j).setValorCambiado(true);
+					valorManos[i] -= 10;
 				}
 			}
+		}
 	}
+
 	// retorna true si la lista contiene una carta As
 	private boolean contieneAs(ArrayList<Carta> mano) {
 		for (Carta carta : mano) {
@@ -175,7 +178,7 @@ public class ServidorBJ implements Runnable {
 		}
 		return false;
 	}
-	
+
 	public void iniciar() {
 		// esperar a los clientes
 		mostrarMensaje("Esperando a los jugadores...");
@@ -226,14 +229,14 @@ public class ServidorBJ implements Runnable {
 	private void analizarMensaje(String entrada, int indexJugador) {
 		// TODO Auto-generated method stub
 		// garantizar que solo se analice la petición del jugador en turno.
-		mostrarMensaje("jugador " +idJugadores[indexJugador] + "entró a analizarMensaje, " + entrada);
+		mostrarMensaje("jugador " + idJugadores[indexJugador] + "entró a analizarMensaje, " + entrada);
 		while (indexJugador != jugadorEnTurno) {
-			
+
 			bloqueoJuego.lock();
 			try {
-				mostrarMensaje("jugador " +idJugadores[indexJugador] + "Se echó a mimir");
+				mostrarMensaje("jugador " + idJugadores[indexJugador] + "Se echó a mimir");
 				esperarTurno.await();
-				mostrarMensaje("jugador " +idJugadores[indexJugador] + "Se despertó");
+				mostrarMensaje("jugador " + idJugadores[indexJugador] + "Se despertó");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -259,9 +262,9 @@ public class ServidorBJ implements Runnable {
 			// mandar mensaje a todos los jugadores
 			if (valorManos[indexJugador] > 21) {
 				// jugador Voló
-				
+
 				estadosJugadores[indexJugador] = "voló";
-				
+
 				datosEnviar
 						.setMensaje(idJugadores[indexJugador] + " tienes " + valorManos[indexJugador] + " volaste :(");
 				datosEnviar.setJugadorEstado("voló");
@@ -423,79 +426,82 @@ public class ServidorBJ implements Runnable {
 				jugadores[0].enviarMensajeCliente(datosEnviar);
 				jugadores[1].enviarMensajeCliente(datosEnviar);
 				jugadores[2].enviarMensajeCliente(datosEnviar);
-				
-				
+
 				iniciarDealer();
 				determinarRondaJuego(indexJugador);
 			}
 		}
 	}
-	
+
 	private void determinarRondaJuego(int indexJugador) {
-        mostrarMensaje("Entró a determinarRonda");
-        datosEnviar = new DatosBlackJack();
-        
+		mostrarMensaje("Entró a determinarRonda");
+		datosEnviar = new DatosBlackJack();
+		
 		while (indexJugador != 3) {
-			
+
+			// Avisar al cliente para que coloque el JOptionPane
 			bloqueoJuego.lock();
 			try {
-				mostrarMensaje("jugador " +idJugadores[indexJugador] + "Se echó a mimir en determinar ronda juego");
+				mostrarMensaje("jugador " + idJugadores[indexJugador] + "Se echó a mimir en determinar ronda juego");
 				finalizar.await();
-				mostrarMensaje("jugador " +idJugadores[indexJugador] + "Se despertó en determinar ronda juego");
+				mostrarMensaje("jugador " + idJugadores[indexJugador] + "Se despertó en determinar ronda juego");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			bloqueoJuego.unlock();
-		} 
-        //if
-        
-        /*
-         * EMPATE Ambos blackjack Ambos mismo valor Ambos pierden3
-         */
-        for (int i = 0; i < 3; i++) {
-            //Empate
-            if ((estadosJugadores[i].equals(estadosJugadores[3]) && estadosJugadores[i].equals("blackjack")) ||
-                     (estadosJugadores[i].equals(estadosJugadores[3]) && estadosJugadores[i].equals("voló")) ||
-                     (valorManos[i] == valorManos[3])) {
-                //Se le devuelve la apuesta
-                datosEnviar.setMensaje("Empató el jugador " + idJugadores[i] + " con el dealer");
-            }
-            //Vuela el dealer
-            else if(estadosJugadores[3].equals("voló")) {
-                //Gana el que no voló
-            	datosEnviar.setMensaje("Gana el jugador " + idJugadores[i] + " porque el dealer voló");
-            }
-            //Vuelva el jugador
-            else if(estadosJugadores[i].equals("voló")) {
-            	datosEnviar.setMensaje("Gana el dealer, porque " + idJugadores[i] + " voló");
-            }
-            //El dealer tiene blackjack
-            else if(estadosJugadores[3].equals("blackjack")) {
-                //Gana el que tenga blackjack
-            	datosEnviar.setMensaje("Gana el dealer y tiene blackjack, pierde " + idJugadores[i]);
-            }
-            //El jugador tiene blackjack
-            else if(estadosJugadores[i].equals("blackjack")) {
-            	datosEnviar.setMensaje("Gana el jugador" + idJugadores[i] + " y tiene blackjack");
+		}
+		// if
 
-            }
-            //Gana quien esté más cerca del 21
-            else if(valorManos[i] > valorManos[3]) {
-            	datosEnviar.setMensaje("Gana el jugador " + idJugadores[i] + " pues tiene " + valorManos[i]);
-            } 
-            else {
-            	datosEnviar.setMensaje("Gana el dealer, porque " + idJugadores[i] + " tiene " + valorManos[i] + " y el dealer tiene " + valorManos[3]);
-            }
-            jugadores[i].enviarMensajeCliente(datosEnviar);
-        }
-        
-        	datosEnviar.setEnJuego(false);
-        	//finalizar.signalAll();
-        	//Dealer despierta los hilos.
+		/*
+		 * EMPATE Ambos blackjack Ambos mismo valor Ambos pierden3
+		 */
+		for (int i = 0; i < 3; i++) {
+			// Empate
+			if ((estadosJugadores[i].equals(estadosJugadores[3]) && estadosJugadores[i].equals("blackjack"))
+					|| (estadosJugadores[i].equals(estadosJugadores[3]) && estadosJugadores[i].equals("voló"))
+					|| (valorManos[i] == valorManos[3])) {
+				// Se le devuelve la apuesta
+				datosEnviar.setMensaje("Empató el jugador " + idJugadores[i] + " con el dealer");
+			}
+			// Vuela el dealer
+			else if (estadosJugadores[3].equals("voló")) {
+				// Gana el que no voló
+				datosEnviar.setMensaje("Gana el jugador " + idJugadores[i] + " porque el dealer voló");
+			}
+			// Vuelva el jugador
+			else if (estadosJugadores[i].equals("voló")) {
+				datosEnviar.setMensaje("Gana el dealer, porque " + idJugadores[i] + " voló");
+			}
+			// El dealer tiene blackjack
+			else if (estadosJugadores[3].equals("blackjack")) {
+				// Gana el que tenga blackjack
+				datosEnviar.setMensaje("Gana el dealer y tiene blackjack, pierde " + idJugadores[i]);
+			}
+			// El jugador tiene blackjack
+			else if (estadosJugadores[i].equals("blackjack")) {
+				datosEnviar.setMensaje("Gana el jugador" + idJugadores[i] + " y tiene blackjack");
 
-    
-    }
+			}
+			// Gana quien esté más cerca del 21
+			else if (valorManos[i] > valorManos[3]) {
+				datosEnviar.setMensaje("Gana el jugador " + idJugadores[i] + " pues tiene " + valorManos[i]);
+			} else {
+				datosEnviar.setMensaje("Gana el dealer, porque " + idJugadores[i] + " tiene " + valorManos[i]
+						+ " y el dealer tiene " + valorManos[3]);
+			}
+			datosEnviar.setIdJugadores(idJugadores);
+			datosEnviar.setJugador(idJugadores[i]);
+			datosEnviar.setJugadorEstado("finalizar");
+			datosEnviar.setEnJuego(false);
+			mostrarMensaje("El booleano enJuego es " + datosEnviar.isEnJuego());
+			jugadores[i].enviarMensajeCliente(datosEnviar);
+		}
+
+		// finalizar.signalAll();
+		// Dealer despierta los hilos.
+
+	}
 
 	public void iniciarDealer() {
 		// le toca turno al dealer.
@@ -514,7 +520,6 @@ public class ServidorBJ implements Runnable {
 		private ObjectOutputStream out;
 		private ObjectInputStream in;
 		private String entrada;
-		
 
 		// variables de control
 		private int indexJugador;
@@ -593,7 +598,7 @@ public class ServidorBJ implements Runnable {
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setMensaje("Inicias " + idJugadores[0] + " tienes " + valorManos[0]);
 				datosEnviar.setMensaje(idJugadores[0] + " Apostaste: " + apuesta[0]);
-				enviarMensajeCliente(datosEnviar); //con esto construye la mesa
+				enviarMensajeCliente(datosEnviar); // con esto construye la mesa
 				jugadorEnTurno = 0;
 			} else if (indexJugador == 1) {
 				// es jugador 2, debe ponerse en espera a la llegada del otro jugador
@@ -690,7 +695,7 @@ public class ServidorBJ implements Runnable {
 
 			while (!seTerminoRonda()) {
 				try {
-					
+
 					entrada = (String) in.readObject();
 					analizarMensaje(entrada, indexJugador);
 				} catch (ClassNotFoundException e) {
@@ -753,18 +758,15 @@ public class ServidorBJ implements Runnable {
 				}
 			}
 			// envia la jugada a los otros jugadores
-			
+
 			datosEnviar.setCarta(carta);
 			jugadores[0].enviarMensajeCliente(datosEnviar);
 			jugadores[1].enviarMensajeCliente(datosEnviar);
 			jugadores[2].enviarMensajeCliente(datosEnviar);
-			
+
 		} // fin while
 		determinarRondaJuego(3);
-	
 
 	}
-
-
 
 }// Fin class ServidorBJ
