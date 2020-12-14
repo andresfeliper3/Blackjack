@@ -13,8 +13,17 @@ public class Carta implements Serializable{
     private String palo;
     private transient Image imagen;
     private int coordenadaX, coordenadaY;
+    private boolean valorCambiado = false;
 	
-    public Carta(String valor, String palo) {
+    public boolean isValorCambiado() {
+		return valorCambiado;
+	}
+
+	public void setValorCambiado(boolean valorCambiado) {
+		this.valorCambiado = valorCambiado;
+	}
+
+	public Carta(String valor, String palo) {
 		this.valor = valor;
 		this.palo = palo;
 	}

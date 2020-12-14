@@ -15,6 +15,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.JOptionPane;
+
 import comunes.Baraja;
 import comunes.Carta;
 import comunes.DatosBlackJack;
@@ -139,6 +141,7 @@ public class ServidorBJ implements Runnable {
 		}
 		//Revisar si tiene una carta As, su valor puede variar
 		if (contieneAs(mano) && valorManos[i] > 21) {
+			
 			revisarAsMano(mano,i);
 		}
 		
@@ -156,7 +159,8 @@ public class ServidorBJ implements Runnable {
 		
 			for(int j=0;j<mano.size();j++) {
 				if(mano.get(j).getValor().equals("As") ) {
-					if(valorManos[i] > 21) {
+					if(valorManos[i] > 21 && !mano.get(j).isValorCambiado()) {
+						mano.get(j).setValorCambiado(true);
 						valorManos[i] -= 10;
 					}
 				}
@@ -459,6 +463,14 @@ public class ServidorBJ implements Runnable {
             	datosEnviar.setMensaje("Gana el dealer, porque " + idJugadores[i] + " tiene " + valorManos[i] + " y el dealer tiene " + valorManos[3]);
             }
             jugadores[i].enviarMensajeCliente(datosEnviar);
+        }
+        
+        int opcion = JOptionPane.showConfirmDialog(null, "Desea jugar otra vez?", "Jugar otra ronda",JOptionPane.YES_NO_OPTION);
+        
+        if(opcion == JOptionPane.YES_OPTION) {
+        	//reiniciarJuego();
+        }else {
+        	//Cerrar todo
         }
     
     }
