@@ -140,52 +140,54 @@ public class VentanaSalaJuego extends JInternalFrame {
 		areaMensajes.append(datosRecibidos.getMensaje() + "\n");
 		ClienteBlackJack cliente = (ClienteBlackJack) this.getTopLevelAncestor();//
 
-		if (datosRecibidos.getJugador().equals(yoId)) {
-			// Si me manda "iniciar" activo botones
-			if (datosRecibidos.getJugadorEstado().equals("iniciar")) {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						activarBotones(true);
-					}
-				});
-			} // Si me manda "plantó" desactivo botones
-			else if (datosRecibidos.getJugadorEstado().equals("plantó")) {
-				cliente.setTurno(false);
-			} else { // Pintar la carta porque no inicié ni planté
-				yo.pintarLaCarta(datosRecibidos.getCarta());
-				// Si me manda "voló", desactivar botones y ceder turno
-				if (datosRecibidos.getJugadorEstado().equals("voló")) {
+		if(datosRecibidos.isEnJuego()) {
+			if (datosRecibidos.getJugador().equals(yoId)) {
+				// Si me manda "iniciar" activo botones
+				if (datosRecibidos.getJugadorEstado().equals("iniciar")) {
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
 							// TODO Auto-generated method stub
-							activarBotones(false);
-							cliente.setTurno(false);
+							activarBotones(true);
 						}
 					});
+				} // Si me manda "plantó" desactivo botones
+				else if (datosRecibidos.getJugadorEstado().equals("plantó")) {
+					cliente.setTurno(false);
+				} else { // Pintar la carta porque no inicié ni planté
+					yo.pintarLaCarta(datosRecibidos.getCarta());
+					// Si me manda "voló", desactivar botones y ceder turno
+					if (datosRecibidos.getJugadorEstado().equals("voló")) {
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								activarBotones(false);
+								cliente.setTurno(false);
+							}
+						});
+					}
 				}
+	
+			} else if (datosRecibidos.getJugador().equals(jugador2Id)) {
+				// mensaje para PanelJuego jugador2
+				// Si sigue o vuela, pinta la carta
+				// D: Y SI PLANTÓ???
+				if (datosRecibidos.getJugadorEstado().equals("sigue") || datosRecibidos.getJugadorEstado().equals("voló")) {
+					jugador2.pintarLaCarta(datosRecibidos.getCarta());
+				}
+			} else if (datosRecibidos.getJugador().equals(jugador3Id)) {
+				if (datosRecibidos.getJugadorEstado().equals("sigue") || datosRecibidos.getJugadorEstado().equals("voló")) {
+					jugador3.pintarLaCarta(datosRecibidos.getCarta());
+				}
+			} else {
+				// mensaje para PanelJuego dealer
+				if (datosRecibidos.getJugadorEstado().equals("sigue") || datosRecibidos.getJugadorEstado().equals("voló")
+						|| datosRecibidos.getJugadorEstado().equals("plantó")) {
+					dealer.pintarLaCarta(datosRecibidos.getCarta());
+				}
+	
 			}
-
-		} else if (datosRecibidos.getJugador().equals(jugador2Id)) {
-			// mensaje para PanelJuego jugador2
-			// Si sigue o vuela, pinta la carta
-			// D: Y SI PLANTÓ???
-			if (datosRecibidos.getJugadorEstado().equals("sigue") || datosRecibidos.getJugadorEstado().equals("voló")) {
-				jugador2.pintarLaCarta(datosRecibidos.getCarta());
-			}
-		} else if (datosRecibidos.getJugador().equals(jugador3Id)) {
-			if (datosRecibidos.getJugadorEstado().equals("sigue") || datosRecibidos.getJugadorEstado().equals("voló")) {
-				jugador3.pintarLaCarta(datosRecibidos.getCarta());
-			}
-		} else {
-			// mensaje para PanelJuego dealer
-			if (datosRecibidos.getJugadorEstado().equals("sigue") || datosRecibidos.getJugadorEstado().equals("voló")
-					|| datosRecibidos.getJugadorEstado().equals("plantó")) {
-				dealer.pintarLaCarta(datosRecibidos.getCarta());
-			}
-
 		}
 	}
 
