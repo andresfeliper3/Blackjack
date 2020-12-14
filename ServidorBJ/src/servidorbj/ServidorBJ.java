@@ -238,8 +238,11 @@ public class ServidorBJ implements Runnable {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				//PUSE EL FINALLY
+			} finally {
+				bloqueoJuego.unlock();
 			}
-			bloqueoJuego.unlock();
+			
 		}
 		// valida turnos para jugador 0 o 1
 
@@ -446,8 +449,10 @@ public class ServidorBJ implements Runnable {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			bloqueoJuego.unlock();
+			} finally {
+				mostrarMensaje("Desbloquea al servidor después de que " + idJugadores[indexJugador] + " pasó");
+				bloqueoJuego.unlock();
+			}		
 		}
 		// if
 
@@ -498,11 +503,56 @@ public class ServidorBJ implements Runnable {
 			}
 			// Dealer despierta los hilos.
 			seTerminoRonda = true;
+			mostrarMensaje("seTerminoRonda se vuelve " + seTerminoRonda);
+			bloqueoJuego.lock();
 			finalizar.signalAll();
+			bloqueoJuego.unlock();
+			
 		}
-	
-		
+		mostrarMensaje("Al final de determinarRondaJuego con jugador " + indexJugador);
+	}
+	private void reiniciarVariables() {
+		estadosJugadores = new String[4];
+		//jugadorEnTurno = 0;
+		seTerminoRonda = false;
+		valorManos = new int[LONGITUD_COLA + 1]; // 3 jugadores y 1 dealer
 
+		mazo = new Baraja();
+		Carta carta;
+
+		// Creación de las manos
+		manoJugador1 = new ArrayList<Carta>();
+		manoJugador2 = new ArrayList<Carta>();
+		manoJugador3 = new ArrayList<Carta>();
+		manoDealer = new ArrayList<Carta>();
+
+		// reparto inicial jugadores 1 y 2
+		for (int i = 1; i <= 2; i++) {
+			// jugador 1
+			carta = mazo.getCarta();
+			manoJugador1.add(carta);
+			calcularValorMano(manoJugador1, carta, 0);
+			// jugador 2
+			carta = mazo.getCarta();
+			manoJugador2.add(carta);
+			calcularValorMano(manoJugador2, carta, 1);
+			// jugador 3
+			carta = mazo.getCarta();
+			manoJugador3.add(carta);
+			calcularValorMano(manoJugador3, carta, 2);
+		}
+		// Carta inicial Dealer
+		carta = mazo.getCarta();
+		manoDealer.add(carta);
+		calcularValorMano(manoDealer, carta, 3);
+
+		// gestiona las tres manos en un solo objeto para facilitar el manejo del hilo
+		manosJugadores = new ArrayList<ArrayList<Carta>>(LONGITUD_COLA + 1);// JUgadores y el dealer
+		manosJugadores.add(manoJugador1);
+		manosJugadores.add(manoJugador2);
+		manosJugadores.add(manoJugador3);
+		manosJugadores.add(manoDealer);
+		
 	}
 
 	public void iniciarDealer() {
@@ -552,7 +602,6 @@ public class ServidorBJ implements Runnable {
 			// TODO Auto-generated method stub
 			while(true) {
 				// procesar los mensajes eviados por el cliente
-				seTerminoRonda = false;
 				mostrarMensaje("Entró al run el indexJugador " + indexJugador);
 				// ver cual jugador es
 				if (indexJugador == 0) {
@@ -561,8 +610,11 @@ public class ServidorBJ implements Runnable {
 					try {
 						// guarda el nombre del primer jugador
 						mostrarMensaje("Jugador con indexJugador " + indexJugador + " va a esperar para leer");
-						idJugadores[0] = (String) in.readObject();// Recoger el nombre del jugador
-						apuesta[0] = (int) in.readObject();
+						if(idJugadores[0] == null /*&& apuesta[0] == null*/) {
+							idJugadores[0] = (String) in.readObject();// Recoger el nombre del jugador
+							apuesta[0] = (int) in.readObject();
+						}
+						
 						mostrarMensaje("Hilo establecido con jugador (0) " + idJugadores[0] + " con apuesta " + apuesta);
 					} catch (ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
@@ -609,8 +661,10 @@ public class ServidorBJ implements Runnable {
 
 					try {
 						// guarda el nombre del primer jugador
-						idJugadores[1] = (String) in.readObject();// Recoger el nombre del jugador
-						apuesta[1] = (int) in.readObject();
+						if(idJugadores[1] == null) {
+							idJugadores[1] = (String) in.readObject();// Recoger el nombre del jugador
+							apuesta[1] = (int) in.readObject();
+						}
 						mostrarMensaje("Hilo establecido con jugador (1) " + idJugadores[1] + " con apuesta " + apuesta);
 					} catch (ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
@@ -657,8 +711,10 @@ public class ServidorBJ implements Runnable {
 					// le manda al jugador 2 todos los datos para montar la sala de Juego
 					// jugador 2 debe esperar su turno
 					try {
-						idJugadores[2] = (String) in.readObject();
-						apuesta[2] = (int) in.readObject();
+						if(idJugadores[2] == null) {
+							idJugadores[2] = (String) in.readObject();
+							apuesta[2] = (int) in.readObject();
+						}		
 						mostrarMensaje("Hilo jugador (3)" + idJugadores[2] + " con apuesta " + apuesta);
 					} catch (ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
@@ -701,6 +757,7 @@ public class ServidorBJ implements Runnable {
 					try {
 						entrada = (String) in.readObject();
 						analizarMensaje(entrada, indexJugador);
+						mostrarMensaje(indexJugador + " salió de analizar mensaje y " + seTerminoRonda); 
 					} catch (ClassNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -708,6 +765,10 @@ public class ServidorBJ implements Runnable {
 						// TODO Auto-generated catch block
 						// controlar cuando se cierra un cliente
 					}
+				}
+				mostrarMensaje(indexJugador + " salió del pinche while");
+				if(indexJugador == 2) {
+					reiniciarVariables();			
 				}
 				// cerrar conexión
 			}
@@ -770,7 +831,7 @@ public class ServidorBJ implements Runnable {
 
 		} // fin while
 		determinarRondaJuego(3);
-
+		
 	}
 
 }// Fin class ServidorBJ
