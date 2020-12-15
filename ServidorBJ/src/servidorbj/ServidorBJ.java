@@ -236,12 +236,13 @@ public class ServidorBJ implements Runnable {
 				mostrarMensaje("jugador " + idJugadores[indexJugador] + "Se echó a mimir");
 				esperarTurno.await();
 				mostrarMensaje("jugador " + idJugadores[indexJugador] + "Se despertó");
+				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				//PUSE EL FINALLY
 			} finally {
-				contador++;
+				
 				bloqueoJuego.unlock();
 			}
 			
@@ -518,7 +519,7 @@ public class ServidorBJ implements Runnable {
 	private void reiniciarVariables() {
 		estadosJugadores = new String[4];
 		//jugadorEnTurno = 0;
-		contador =0;
+		datosEnviar.setCount(0);
 		seTerminoRonda = false;
 		valorManos = new int[LONGITUD_COLA + 1]; // 3 jugadores y 1 dealer
 
@@ -776,9 +777,9 @@ public class ServidorBJ implements Runnable {
 						// controlar cuando se cierra un cliente
 					}
 				}
-				mostrarMensaje("CONTADOR VALE: "+ contador); 
+				mostrarMensaje("CONTADOR VALE: "+ datosEnviar.getCount()); 
 				mostrarMensaje(indexJugador + " salió del pinche while");
-				if(contador==3) {
+				if(datosEnviar.getCount()==3) {
 					mostrarMensaje(indexJugador + " VOY A REINICIAR LAS VARIABLES" + seTerminoRonda); 
 					reiniciarVariables();			
 				}
@@ -797,6 +798,7 @@ public class ServidorBJ implements Runnable {
 		}
 	}// fin inner class Jugador
 
+	
 	// Jugador dealer emulado por el servidor
 	@Override
 	public void run() {

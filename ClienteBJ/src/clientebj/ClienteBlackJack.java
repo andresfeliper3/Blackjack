@@ -250,6 +250,7 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 							ventanaEspera = new VentanaEspera(idYo);
 							add(ventanaEspera);
 							repetirRonda = true;
+							datosRecibidos.setCount(1);
 							break;
 						} else {
 							// Cerra todo

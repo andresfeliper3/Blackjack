@@ -13,8 +13,19 @@ public class DatosBlackJack implements Serializable{
 	private String mensaje;
 	private String jugador,jugadorEstado;
 	private boolean enJuego = true;
+	private int count=0;
 	
-	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		
+		if(count == 0) {
+			this.count=0;
+		}else {
+			this.count++;
+		}
+	}
 	public boolean isEnJuego() {
 		return enJuego;
 	}
