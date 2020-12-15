@@ -18,14 +18,7 @@ public class DatosBlackJack implements Serializable{
 	public int getCount() {
 		return count;
 	}
-	public void setCount(int count) {
-		
-		if(count == 0) {
-			this.count=0;
-		}else {
-			this.count++;
-		}
-	}
+	
 	public boolean isEnJuego() {
 		return enJuego;
 	}

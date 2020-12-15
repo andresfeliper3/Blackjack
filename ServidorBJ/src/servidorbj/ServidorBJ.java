@@ -510,6 +510,7 @@ public class ServidorBJ implements Runnable {
 			seTerminoRonda = true;
 			mostrarMensaje("seTerminoRonda se vuelve " + seTerminoRonda);
 			bloqueoJuego.lock();
+			
 			finalizar.signalAll();
 			bloqueoJuego.unlock();
 			
@@ -519,7 +520,7 @@ public class ServidorBJ implements Runnable {
 	private void reiniciarVariables() {
 		estadosJugadores = new String[4];
 		//jugadorEnTurno = 0;
-		datosEnviar.setCount(0);
+	
 		seTerminoRonda = false;
 		valorManos = new int[LONGITUD_COLA + 1]; // 3 jugadores y 1 dealer
 
@@ -566,7 +567,17 @@ public class ServidorBJ implements Runnable {
 		Thread dealer = new Thread(this);
 		dealer.start();
 	}
-
+	//Retorna el index de un elemento en un array de Strings
+	public int encontrarEnArray(String[] lista, String elemento)
+	{
+	    for (int i = 0; i < lista.length; i++)
+	        if (lista[i].equals(elemento)) {
+	            return i;
+	        }
+	 
+	    return -1;
+	}
+	 
 	/*
 	 * The Class Jugador. Clase interna que maneja el servidor para gestionar la
 	 * comunicación con cada cliente Jugador que se conecte
@@ -608,9 +619,6 @@ public class ServidorBJ implements Runnable {
 			// TODO Auto-generated method stub
 			while(true) {
 				
-				while(seTerminoRonda) {
-					//mostrarMensaje("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + indexJugador);
-				}
 				// procesar los mensajes eviados por el cliente
 				mostrarMensaje("Entró al run el indexJugador " + indexJugador);
 				// ver cual jugador es
@@ -765,7 +773,6 @@ public class ServidorBJ implements Runnable {
 
 				while (!seTerminoRonda) {
 					try {
-						//mostrarMensaje(indexJugador + " AYUDAAAAAAAAAAAAAAAAAAAAAAAA" + seTerminoRonda); 
 						entrada = (String) in.readObject();
 						analizarMensaje(entrada, indexJugador);
 						mostrarMensaje(indexJugador + " salió de analizar mensaje y " + seTerminoRonda); 
@@ -777,9 +784,25 @@ public class ServidorBJ implements Runnable {
 						// controlar cuando se cierra un cliente
 					}
 				}
-				mostrarMensaje("CONTADOR VALE: "+ datosEnviar.getCount()); 
-				mostrarMensaje(indexJugador + " salió del pinche while");
-				if(datosEnviar.getCount()==3) {
+				//Debería esperar al primero que haga click
+				try {
+					mostrarMensaje("Esperando el click");
+					String aux = (String) in.readObject();
+					mostrarMensaje("Dio click el jugador " + aux);
+					//Nuevo index jugador del jugador que hizo click
+					indexJugador = contador;		
+					//Posición en el array del jugador que hizo click
+					int index = encontrarEnArray(idJugadores, aux);
+					idJugadores[contador] = aux;
+					jugadores[contador] = this;
+					contador++;
+				} catch (ClassNotFoundException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				mostrarMensaje("CONTADOR VALE: "+ contador); 
+				mostrarMensaje(indexJugador  + " cambiado, salió del pinche while");
+				if(contador == 3) {
 					mostrarMensaje(indexJugador + " VOY A REINICIAR LAS VARIABLES" + seTerminoRonda); 
 					reiniciarVariables();			
 				}
