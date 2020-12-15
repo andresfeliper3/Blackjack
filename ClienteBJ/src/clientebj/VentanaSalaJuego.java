@@ -191,7 +191,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 			}
 		}
 	}
-
+	
 	private void enviarDatos(String mensaje) {
 		// TODO Auto-generated method stub
 		ClienteBlackJack cliente = (ClienteBlackJack) this.getTopLevelAncestor();

@@ -59,13 +59,12 @@ public class PanelJugador extends JPanel {
 		Font font =new Font(Font.DIALOG,Font.BOLD,12);
 		g.setFont(font);
 				
-		//pinta la mano inicial
-//		for(int i=0;i<dibujoRecordar.size();i++) {
-//			g.drawString(dibujoRecordar.get(i).getCartaRecordar(), dibujoRecordar.get(i).getxRecordar(),35);
-//		}	
-		for(Recuerdo carta : dibujoRecordar) {
-			g.drawImage(carta.getImagenRecordar(), carta.getxRecordar(),35, this);
+		for(int i=0;i<dibujoRecordar.size();i++) {
+			g.drawImage(dibujoRecordar.get(i).getImagenRecordar(), dibujoRecordar.get(i).getxRecordar(),35, this);
 		}
+	//	for(Recuerdo carta : dibujoRecordar) {
+		//	g.drawImage(carta.getImagenRecordar(), carta.getxRecordar(),35, this);
+		//}
 	}
 	
 	private class Recuerdo{

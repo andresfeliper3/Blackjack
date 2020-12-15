@@ -53,7 +53,7 @@ public class VentanaEntrada extends JInternalFrame {
 	private Container getContainerFrames() {
 		return this.getParent();
 	}
-    
+ 
 	private void cerrarVentanaEntrada() {
 		this.dispose();
 	}

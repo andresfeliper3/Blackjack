@@ -47,6 +47,7 @@ public class ServidorBJ implements Runnable {
 	private int[] apuesta = new int[4];
 	private String[] estadosJugadores = new String[4];
 	private int jugadorEnTurno;
+	private int contador=0;
 	// private boolean iniciarJuego;
 	private Baraja mazo;
 	private ArrayList<ArrayList<Carta>> manosJugadores;
@@ -240,6 +241,7 @@ public class ServidorBJ implements Runnable {
 				e.printStackTrace();
 				//PUSE EL FINALLY
 			} finally {
+				contador++;
 				bloqueoJuego.unlock();
 			}
 			
@@ -454,8 +456,6 @@ public class ServidorBJ implements Runnable {
 				bloqueoJuego.unlock();
 			}		
 		}
-		// if
-
 		/*
 		 * EMPATE Ambos blackjack Ambos mismo valor Ambos pierden3
 		 */
@@ -500,6 +500,10 @@ public class ServidorBJ implements Runnable {
 				datosEnviar.setEnJuego(false);
 				mostrarMensaje("El booleano enJuego es " + datosEnviar.isEnJuego());
 				jugadores[i].enviarMensajeCliente(datosEnviar);
+				jugadores[0].setSuspendido(true);
+				jugadores[1].setSuspendido(true);
+				jugadores[2].setSuspendido(true);
+				
 			}
 			// Dealer despierta los hilos.
 			seTerminoRonda = true;
@@ -514,6 +518,7 @@ public class ServidorBJ implements Runnable {
 	private void reiniciarVariables() {
 		estadosJugadores = new String[4];
 		//jugadorEnTurno = 0;
+		contador =0;
 		seTerminoRonda = false;
 		valorManos = new int[LONGITUD_COLA + 1]; // 3 jugadores y 1 dealer
 
@@ -601,6 +606,10 @@ public class ServidorBJ implements Runnable {
 		public void run() {
 			// TODO Auto-generated method stub
 			while(true) {
+				
+				while(seTerminoRonda) {
+					//mostrarMensaje("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + indexJugador);
+				}
 				// procesar los mensajes eviados por el cliente
 				mostrarMensaje("Entró al run el indexJugador " + indexJugador);
 				// ver cual jugador es
@@ -610,7 +619,7 @@ public class ServidorBJ implements Runnable {
 					try {
 						// guarda el nombre del primer jugador
 						mostrarMensaje("Jugador con indexJugador " + indexJugador + " va a esperar para leer");
-						if(idJugadores[0] == null /*&& apuesta[0] == null*/) {
+						if(idJugadores[0] == null) {
 							idJugadores[0] = (String) in.readObject();// Recoger el nombre del jugador
 							apuesta[0] = (int) in.readObject();
 						}
@@ -755,6 +764,7 @@ public class ServidorBJ implements Runnable {
 
 				while (!seTerminoRonda) {
 					try {
+						//mostrarMensaje(indexJugador + " AYUDAAAAAAAAAAAAAAAAAAAAAAAA" + seTerminoRonda); 
 						entrada = (String) in.readObject();
 						analizarMensaje(entrada, indexJugador);
 						mostrarMensaje(indexJugador + " salió de analizar mensaje y " + seTerminoRonda); 
@@ -766,8 +776,10 @@ public class ServidorBJ implements Runnable {
 						// controlar cuando se cierra un cliente
 					}
 				}
+				mostrarMensaje("CONTADOR VALE: "+ contador); 
 				mostrarMensaje(indexJugador + " salió del pinche while");
-				if(indexJugador == 2) {
+				if(contador==3) {
+					mostrarMensaje(indexJugador + " VOY A REINICIAR LAS VARIABLES" + seTerminoRonda); 
 					reiniciarVariables();			
 				}
 				// cerrar conexión
