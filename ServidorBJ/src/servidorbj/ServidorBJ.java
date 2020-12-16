@@ -216,8 +216,7 @@ public class ServidorBJ implements Runnable {
 		try {
 			this.mostrarMensaje("Despertando al jugador 1 para que inicie el juego");
 			jugadores[0].setSuspendido(false);
-			jugadores[1].setSuspendido(false);
-			mostrarMensaje("Coloca el suspendido en false de jugadores " + jugadores[0].indexJugador + " y " + jugadores[1].indexJugador);
+			mostrarMensaje("Coloca el suspendido en false de jugadores " + jugadores[0].indexJugador);
 			esperarInicio.signalAll(); // POR QUÉ?
 		} catch (Exception e) {
 
@@ -226,7 +225,25 @@ public class ServidorBJ implements Runnable {
 			bloqueoJuego.unlock();
 		}
 	}
+	private void despertarAlJugador2() {
 
+		this.mostrarMensaje("bloqueando al servidor para despertar al jugador 2");
+		bloqueoJuego.lock();
+
+		// despertar al jugador 1 porque es su turno
+		try {
+			this.mostrarMensaje("Despertando al jugador 2 para que inicie el juego");
+			jugadores[1].setSuspendido(false);
+			mostrarMensaje("Coloca el suspendido en false de jugadores " + 	jugadores[1].indexJugador);
+			esperarInicio.signal(); // POR QUÉ?
+
+		} catch (Exception e) {
+		} finally {
+			this.mostrarMensaje("Desbloqueando al servidor luego de despertar al jugador 1 para que inicie el juego");
+			bloqueoJuego.unlock();
+			mostrarMensaje("Desbloqueado el servidor");
+		}
+	}
 
 	private void analizarMensaje(String entrada, int indexJugador) {
 		// TODO Auto-generated method stub
@@ -639,6 +656,7 @@ public class ServidorBJ implements Runnable {
 						mostrarMensaje("Parando al Jugador 1 en espera del otro jugador...");
 						try {
 							esperarInicio.await();// Hilo duerme y despierta aquí
+							mostrarMensaje("Jugador 1 se despierta");
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -667,7 +685,12 @@ public class ServidorBJ implements Runnable {
 					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[1]);
 					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[2]);
 					enviarMensajeCliente(datosEnviar); // con esto construye la mesa
+					
+					despertarAlJugador2();
+					
 					jugadorEnTurno = 0;
+					
+					
 				} else if (indexJugador == 1) {
 					// es jugador 2, debe ponerse en espera a la llegada del otro jugador
 
@@ -685,19 +708,22 @@ public class ServidorBJ implements Runnable {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					mostrarMensaje("bloquea servidor para poner en espera de inicio al jugador 2");
-					bloqueoJuego.lock(); // bloquea el servidor
-
+					
 					while (suspendido) {// Si el hilo está suspendido, se irá a dormir el hilo
-						mostrarMensaje("Parando al Jugador 2 en espera del otro jugador...");
+						//LA SOLUCIÓN DEL ILLEGALMONITOR FUE METER ESTA MONDÁ
+						mostrarMensaje("bloquea servidor para poner en espera de inicio al jugador 2");
+						bloqueoJuego.lock(); // bloquea el servidor
 						try {
+							mostrarMensaje("Parando al Jugador 2 en espera del otro jugador...");
 							esperarInicio.await();// Hilo duerme y despierta aquí
+							mostrarMensaje("Se despierta jugador 2");
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} finally {
 							mostrarMensaje("Desbloquea Servidor luego de bloquear al jugador 2");
 							bloqueoJuego.unlock();
+							mostrarMensaje("DESPUÉS DEL ERROR");
 						}
 					}
 
@@ -767,6 +793,7 @@ public class ServidorBJ implements Runnable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} finally {
+						mostrarMensaje("Desbloquea el servidor luego de dormir al jugador 3 esperando turno");
 						bloqueoJuego.unlock();
 					}
 				}
