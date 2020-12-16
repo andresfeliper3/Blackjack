@@ -191,42 +191,33 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 				
 				System.out.println("Cliente " + idYo + " esperando lectura");
 				datosRecibidos = (DatosBlackJack) in.readObject();
-				String[] idJugadores = {datosRecibidos.getIdJugador1(), datosRecibidos.getIdJugador2(), datosRecibidos.getIdJugador3()};
-				System.out.println("nombres");
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[0]);
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[0]);
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[0]);
-				System.out.println("Separado");
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugador1());
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugador2());
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugador3());
-				System.out.println("Clinete " + idYo + " recibiendo prueba " + datosRecibidos.isPrueba());
+				
 				// lee los datos con los que construye la mesa
-				if (idJugadores[0].equals(idYo)) {
+				if (datosRecibidos.getIdJugadores()[0].equals(idYo)) {
 					apuestasYo = datosRecibidos.getApuestasJugadores()[0];
 
-					otroJugador = idJugadores[1];
+					otroJugador = datosRecibidos.getIdJugadores()[1];
 					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[1];
 
-					ultimoJugador = idJugadores[2];
+					ultimoJugador = datosRecibidos.getIdJugadores()[2];
 					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
 					System.out.println("EL JUGADOR " + idYo + " ESTÁ EN LA POSICIÓN 0");
 					turno = true;
-				} else if (idJugadores[1].equals(idYo)) {
+				} else if (datosRecibidos.getIdJugadores()[1].equals(idYo)) {
 					apuestasYo = datosRecibidos.getApuestasJugadores()[1];
 
-					otroJugador = idJugadores[0];
+					otroJugador = datosRecibidos.getIdJugadores()[0];
 					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
 
-					ultimoJugador = idJugadores[2];
+					ultimoJugador = datosRecibidos.getIdJugadores()[2];
 					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
 				} else { // Yo estoy en la posición 2
 					apuestasYo = datosRecibidos.getApuestasJugadores()[2];
 
-					otroJugador = idJugadores[0];
+					otroJugador = datosRecibidos.getIdJugadores()[0];
 					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
 
-					ultimoJugador = idJugadores[1];
+					ultimoJugador = datosRecibidos.getIdJugadores()[1];
 					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[1];
 
 				}
