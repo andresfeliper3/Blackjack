@@ -191,41 +191,42 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 				
 				System.out.println("Cliente " + idYo + " esperando lectura");
 				datosRecibidos = (DatosBlackJack) in.readObject();
+				String[] idJugadores = {datosRecibidos.getIdJugador1(), datosRecibidos.getIdJugador2(), datosRecibidos.getIdJugador3()};
 				System.out.println("nombres");
 				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[0]);
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[1]);
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[2]);
-				System.out.println("valor manos");
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getValorManos()[0]);
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getValorManos()[1]);
-				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getValorManos()[2]);
+				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[0]);
+				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[0]);
+				System.out.println("Separado");
+				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugador1());
+				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugador2());
+				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugador3());
 				System.out.println("Clinete " + idYo + " recibiendo prueba " + datosRecibidos.isPrueba());
 				// lee los datos con los que construye la mesa
-				if (datosRecibidos.getIdJugadores()[0].equals(idYo)) {
+				if (idJugadores[0].equals(idYo)) {
 					apuestasYo = datosRecibidos.getApuestasJugadores()[0];
 
-					otroJugador = datosRecibidos.getIdJugadores()[1];
+					otroJugador = idJugadores[1];
 					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[1];
 
-					ultimoJugador = datosRecibidos.getIdJugadores()[2];
+					ultimoJugador = idJugadores[2];
 					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
 					System.out.println("EL JUGADOR " + idYo + " ESTÁ EN LA POSICIÓN 0");
 					turno = true;
-				} else if (datosRecibidos.getIdJugadores()[1].equals(idYo)) {
+				} else if (idJugadores[1].equals(idYo)) {
 					apuestasYo = datosRecibidos.getApuestasJugadores()[1];
 
-					otroJugador = datosRecibidos.getIdJugadores()[0];
+					otroJugador = idJugadores[0];
 					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
 
-					ultimoJugador = datosRecibidos.getIdJugadores()[2];
+					ultimoJugador = idJugadores[2];
 					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
 				} else { // Yo estoy en la posición 2
 					apuestasYo = datosRecibidos.getApuestasJugadores()[2];
 
-					otroJugador = datosRecibidos.getIdJugadores()[0];
+					otroJugador = idJugadores[0];
 					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
 
-					ultimoJugador = datosRecibidos.getIdJugadores()[1];
+					ultimoJugador = idJugadores[1];
 					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[1];
 
 				}

@@ -14,6 +14,7 @@ public class DatosBlackJack implements Serializable{
 	private String jugador,jugadorEstado;
 	private boolean enJuego = true;
 	private boolean prueba = true;
+	private String idJugador1, idJugador2, idJugador3;
 	private int count=0;
 	
 	public int getCount() {
@@ -21,6 +22,36 @@ public class DatosBlackJack implements Serializable{
 	}
 	
 	
+	public String getIdJugador1() {
+		return idJugador1;
+	}
+
+
+	public void setIdJugador1(String idJugador1) {
+		this.idJugador1 = idJugador1;
+	}
+
+
+	public String getIdJugador2() {
+		return idJugador2;
+	}
+
+
+	public void setIdJugador2(String idJugador2) {
+		this.idJugador2 = idJugador2;
+	}
+
+
+	public String getIdJugador3() {
+		return idJugador3;
+	}
+
+
+	public void setIdJugador3(String idJugador3) {
+		this.idJugador3 = idJugador3;
+	}
+
+
 	public boolean isPrueba() {
 		return prueba;
 	}
@@ -59,6 +90,8 @@ public class DatosBlackJack implements Serializable{
 	}
 		
 	public String[] getIdJugadores() {
+		System.out.println("En DatosBlackJack, getIdJugadores");
+	
 		return idJugadores;
 	}
 	public void setIdJugadores(String[] idJugadores) {

@@ -687,9 +687,17 @@ public class ServidorBJ implements Runnable {
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setMensaje("Inicias " + idJugadores[0] + " tienes " + valorManos[0]);
 				//	datosEnviar.setMensaje(idJugadores[0] + " 0 Apostaste: " + apuesta[0]);
-					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugadores()[0]);
+							
+					datosEnviar.setIdJugador1(idJugadores[0]);
+					datosEnviar.setIdJugador2(idJugadores[1]);
+					datosEnviar.setIdJugador3(idJugadores[2]);
+					mostrarMensaje("En " + indexJugador +  " " + datosEnviar.getIdJugadores()[0]);
 					mostrarMensaje("En " + indexJugador + " " +  datosEnviar.getIdJugadores()[1]);
 					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugadores()[2]);
+					mostrarMensaje("Separación");
+					mostrarMensaje("En " + indexJugador +  " " + datosEnviar.getIdJugador1());
+					mostrarMensaje("En " + indexJugador + " " +  datosEnviar.getIdJugador2());
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugador3());
 					enviarMensajeCliente(datosEnviar); // con esto construye la mesa
 					
 					despertarAlJugador2();
@@ -748,14 +756,19 @@ public class ServidorBJ implements Runnable {
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setMensaje("Inicias " + idJugadores[1] + " tienes " + valorManos[1]);
 					datosEnviar.setPrueba(false);
+					//
+					datosEnviar.setIdJugador1(idJugadores[0]);
+					datosEnviar.setIdJugador2(idJugadores[1]);
+					datosEnviar.setIdJugador3(idJugadores[2]);
 					//datosEnviar.setMensaje(idJugadores[1] + " 1 Apostaste: " + apuesta[1]);
 					mostrarMensaje("En " + indexJugador +  " " + datosEnviar.getIdJugadores()[0]);
 					mostrarMensaje("En " + indexJugador + " " +  datosEnviar.getIdJugadores()[1]);
 					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugadores()[2]);
-					mostrarMensaje("Valores manos");
-					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getValorManos()[0]);
-					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getValorManos()[1]);
-					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getValorManos()[2]);
+					mostrarMensaje("Separación");
+					mostrarMensaje("En " + indexJugador +  " " + datosEnviar.getIdJugador1());
+					mostrarMensaje("En " + indexJugador + " " +  datosEnviar.getIdJugador2());
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugador3());
+					
 					enviarMensajeCliente(datosEnviar);
 					
 					jugadorEnTurno = 0;
@@ -787,10 +800,19 @@ public class ServidorBJ implements Runnable {
 					datosEnviar.setIdJugadores(idJugadores);
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setMensaje("Inicias " + idJugadores[2] + " tienes " + valorManos[2]);
-				//	datosEnviar.setMensaje(idJugadores[2] + " 2  Apostaste: " + apuesta[2]);
-					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugadores()[0]);
-					mostrarMensaje("En " + indexJugador +  " " + datosEnviar.getIdJugadores()[1]);
-					mostrarMensaje("En " + indexJugador +   " " + datosEnviar.getIdJugadores()[2]);
+				//	datosEnviar.setMensaje(idJugadores[2] + " 2  Apostaste: " + apuesta[2]);				
+					//
+					datosEnviar.setIdJugador1(idJugadores[0]);
+					datosEnviar.setIdJugador2(idJugadores[1]);
+					datosEnviar.setIdJugador3(idJugadores[2]);
+	
+					mostrarMensaje("En " + indexJugador +  " " + datosEnviar.getIdJugadores()[0]);
+					mostrarMensaje("En " + indexJugador + " " +  datosEnviar.getIdJugadores()[1]);
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugadores()[2]);
+					mostrarMensaje("Separación");
+					mostrarMensaje("En " + indexJugador +  " " + datosEnviar.getIdJugador1());
+					mostrarMensaje("En " + indexJugador + " " +  datosEnviar.getIdJugador2());
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugador3());
 					enviarMensajeCliente(datosEnviar);
 
 					iniciarRondaJuego(); // despertar al jugador 1 para iniciar el juego
