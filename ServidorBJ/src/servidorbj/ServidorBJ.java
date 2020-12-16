@@ -39,7 +39,7 @@ public class ServidorBJ implements Runnable {
 	// variables para manejo de hilos
 	private ExecutorService manejadorHilos;
 	private Lock bloqueoJuego;
-	private Condition esperarInicio, esperarTurno, finalizar;
+	private Condition esperarInicio, esperarTurno, finalizar, esperarReinicio;
 	private Jugador[] jugadores;
 
 	// variables de control del juego
@@ -48,6 +48,8 @@ public class ServidorBJ implements Runnable {
 	private String[] estadosJugadores = new String[4];
 	private int jugadorEnTurno;
 	private int contador=0;
+	private int orden =0;
+	private int ronda=0;
 	// private boolean iniciarJuego;
 	private Baraja mazo;
 	private ArrayList<ArrayList<Carta>> manosJugadores;
@@ -80,6 +82,7 @@ public class ServidorBJ implements Runnable {
 		bloqueoJuego = new ReentrantLock();
 		esperarInicio = bloqueoJuego.newCondition();
 		esperarTurno = bloqueoJuego.newCondition();
+		esperarReinicio = bloqueoJuego.newCondition();
 		finalizar = bloqueoJuego.newCondition();
 		jugadores = new Jugador[LONGITUD_COLA];
 	}
@@ -412,7 +415,9 @@ public class ServidorBJ implements Runnable {
 					jugadores[0].enviarMensajeCliente(datosEnviar);
 					jugadores[1].enviarMensajeCliente(datosEnviar);
 					jugadores[2].enviarMensajeCliente(datosEnviar);
-
+					
+					//Orden variable de control, el jugador 3 reinicia el orden para poder reiniciar el juego de manera adecuada y ordenada
+					orden=0;
 					iniciarDealer();
 					determinarRondaJuego(indexJugador);
 				}
@@ -501,7 +506,9 @@ public class ServidorBJ implements Runnable {
 				jugadores[0].enviarMensajeCliente(datosEnviar);
 				jugadores[1].enviarMensajeCliente(datosEnviar);
 				jugadores[2].enviarMensajeCliente(datosEnviar);
-
+				
+				//Orden variable de control, el jugador 3 reinicia el orden para poder reiniciar el juego de manera adecuada y ordenada
+				orden=0;
 				iniciarDealer();
 				determinarRondaJuego(indexJugador);
 			}
@@ -660,7 +667,12 @@ public class ServidorBJ implements Runnable {
 
 					while (suspendido) {// Si el hilo está suspendido, se irá a dormir el hilo
 						mostrarMensaje("Parando al Jugador 1 en espera del otro jugador...");
+						if(ronda>0){
+							esperarReinicio.signalAll();
+							orden++;
+						}
 						try {
+							
 							esperarInicio.await();// Hilo duerme y despierta aquí
 							mostrarMensaje("Jugador 1 se despierta");
 						} catch (InterruptedException e) {
@@ -729,6 +741,11 @@ public class ServidorBJ implements Runnable {
 						bloqueoJuego.lock(); // bloquea el servidor
 						try {
 							mostrarMensaje("Parando al Jugador 2 en espera del otro jugador...");
+							
+							if(ronda>0) {
+								esperarReinicio.signalAll();
+								orden++;
+							}
 							esperarInicio.await();// Hilo duerme y despierta aquí
 							mostrarMensaje("Se despierta jugador 2");
 						} catch (InterruptedException e) {
@@ -852,17 +869,19 @@ public class ServidorBJ implements Runnable {
 					mostrarMensaje("Dio click el jugador " + aux);
 					
 					//Nuevo index jugador del jugador que hizo click
-					indexJugador = contador;		
+					//indexJugador = contador;		
 					//Posición en el array del jugador que hizo click
 					//int index = encontrarEnArray(idJugadores, aux);
-					idJugadores[contador] = aux;
-					jugadores[contador] = this;
+					//idJugadores[contador] = aux;
+					//jugadores[contador] = this;
 					
 					contador++;
 				} catch (ClassNotFoundException | IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				ronda++;
 				mostrarMensaje("CONTADOR VALE: "+ contador); 
 				mostrarMensaje(indexJugador  + " cambiado, salió del pinche while");
 				if(contador == 3) {
@@ -870,6 +889,27 @@ public class ServidorBJ implements Runnable {
 					reiniciarVariables();			
 				}
 				// cerrar conexión
+
+				mostrarMensaje("El jugador: " + indexJugador + ", Orden: " + orden);
+				
+				if(indexJugador != 0) {
+					
+					while(orden != indexJugador) {
+						bloqueoJuego.lock();
+						try {
+							mostrarMensaje("El jugador: " + indexJugador + " ,Se quedó dormido esperando a que sea su turno para reiniciar el juego");
+							esperarReinicio.await();// Hilo duerme y despierta aquí
+							mostrarMensaje("El jugador: " + indexJugador + "se despierta en el while de reinicio");
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}finally {
+							bloqueoJuego.unlock();
+						}
+					}
+				}
+				
+				mostrarMensaje("El jugador: " + indexJugador + "YA SALIÓ DEL WHILE DEL REINICIO Y VA ES PA'RRIBA CSM");
 			}
 		}
 
