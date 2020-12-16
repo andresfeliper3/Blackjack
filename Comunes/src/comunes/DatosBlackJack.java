@@ -13,12 +13,24 @@ public class DatosBlackJack implements Serializable{
 	private String mensaje;
 	private String jugador,jugadorEstado;
 	private boolean enJuego = true;
+	private boolean prueba = true;
 	private int count=0;
 	
 	public int getCount() {
 		return count;
 	}
 	
+	
+	public boolean isPrueba() {
+		return prueba;
+	}
+
+
+	public void setPrueba(boolean prueba) {
+		this.prueba = prueba;
+	}
+
+
 	public boolean isEnJuego() {
 		return enJuego;
 	}

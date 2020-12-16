@@ -81,7 +81,7 @@ public class PanelJugador extends JPanel {
 		}
 		public Image getImagenRecordar() {
 			
-			BufferedImage imagenesCartas = FileIO.readImageFile(this,RUTA_FILE);
+			BufferedImage imagenesCartas = FileIO.readImageFile(this, RUTA_FILE);
 			imagenCarta = imagenesCartas.getSubimage(cartaRecordar.getCoordenadaX(), cartaRecordar.getCoordenadaY(), Carta.WIDTH,Carta.HEIGHT);
 			return imagenCarta;
 		}

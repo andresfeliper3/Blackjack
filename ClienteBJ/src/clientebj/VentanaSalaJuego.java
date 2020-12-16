@@ -118,12 +118,17 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 	// Se llama cuando se crea la sala de juego por primera vez
 	public void pintarCartasInicio(DatosBlackJack datosRecibidos) {
+		System.out.println("pintarcartasinicio");
+		//MENSAJE: Le están llegando en el orden incorrecto al reiniciar
+		System.out.println(datosRecibidos.getIdJugadores()[0]);
+		System.out.println(datosRecibidos.getIdJugadores()[1]);
+		System.out.println(datosRecibidos.getIdJugadores()[2]);
 		if (datosRecibidos.getIdJugadores()[0].equals(yoId)) {// Si yo estoy en la posición 0
 			yo.pintarCartasInicio(datosRecibidos.getManoJugador1());// pinte cartas de inicio del jugador yo
 			jugador2.pintarCartasInicio(datosRecibidos.getManoJugador2());// pinte las cartas del jugador 2
 			jugador3.pintarCartasInicio(datosRecibidos.getManoJugador3());
 		} else if (datosRecibidos.getIdJugadores()[1].equals(yoId)) { // si yo estoy en la posición 1
-			yo.pintarCartasInicio(datosRecibidos.getManoJugador2());
+			yo.pintarCartasInicio(datosRecibidos.getManoJugador2()); 
 			jugador2.pintarCartasInicio(datosRecibidos.getManoJugador1());
 			jugador3.pintarCartasInicio(datosRecibidos.getManoJugador3());
 		} else { // Si yo estoy en la posición 2

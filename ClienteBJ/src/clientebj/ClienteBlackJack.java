@@ -185,14 +185,21 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 			// datosRecibidos = new DatosBlackJack();
 			// TODO Auto-generated method stub
 			// mostrar bienvenida al jugador
+			System.out.println("Cliente " + idYo + " iniciando ronda");
 			datosRecibidos = new DatosBlackJack();
 			try {
 				
 				System.out.println("Cliente " + idYo + " esperando lectura");
 				datosRecibidos = (DatosBlackJack) in.readObject();
+				System.out.println("nombres");
 				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[0]);
 				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[1]);
 				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getIdJugadores()[2]);
+				System.out.println("valor manos");
+				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getValorManos()[0]);
+				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getValorManos()[1]);
+				System.out.println("Cliente " + idYo + " recibiendo " + datosRecibidos.getValorManos()[2]);
+				System.out.println("Clinete " + idYo + " recibiendo prueba " + datosRecibidos.isPrueba());
 				// lee los datos con los que construye la mesa
 				if (datosRecibidos.getIdJugadores()[0].equals(idYo)) {
 					apuestasYo = datosRecibidos.getApuestasJugadores()[0];

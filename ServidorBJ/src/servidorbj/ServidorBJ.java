@@ -111,8 +111,7 @@ public class ServidorBJ implements Runnable {
 			manoJugador2.add(carta);
 			calcularValorMano(manoJugador2, carta, 1);
 			// jugador 3
-			carta = mazo.getCarta();
-			
+			carta = mazo.getCarta();		
 			manoJugador3.add(carta);
 			calcularValorMano(manoJugador3, carta, 2);
 		}
@@ -128,6 +127,58 @@ public class ServidorBJ implements Runnable {
 		manosJugadores.add(manoJugador3);
 		manosJugadores.add(manoDealer);
 	}
+	private void reiniciarVariables() {
+		estadosJugadores = new String[4];
+		//jugadorEnTurno = 0;
+		contador = 0;
+		seTerminoRonda = false;
+		valorManos = new int[LONGITUD_COLA + 1]; // 3 jugadores y 1 dealer
+
+		mazo = new Baraja();
+		Carta carta;
+
+		// Creación de las manos
+		manoJugador1 = new ArrayList<Carta>();
+		manoJugador2 = new ArrayList<Carta>();
+		manoJugador3 = new ArrayList<Carta>();
+		manoDealer = new ArrayList<Carta>();
+
+		// reparto inicial jugadores 1,2 y 3
+		for (int i = 1; i <= 2; i++) {
+			// jugador 1
+			carta = mazo.getCarta();
+			manoJugador1.add(carta);
+			calcularValorMano(manoJugador1, carta, 0);
+			// jugador 2
+			carta = mazo.getCarta();
+			manoJugador2.add(carta);
+			calcularValorMano(manoJugador2, carta, 1);
+			// jugador 3
+			carta = mazo.getCarta();
+			manoJugador3.add(carta);
+			calcularValorMano(manoJugador3, carta, 2);
+		}
+		// Carta inicial Dealer
+		carta = mazo.getCarta();
+		manoDealer.add(carta);
+		calcularValorMano(manoDealer, carta, 3);
+
+		// gestiona las tres manos en un solo objeto para facilitar el manejo del hilo
+		manosJugadores = new ArrayList<ArrayList<Carta>>(LONGITUD_COLA + 1);// JUgadores y el dealer
+		manosJugadores.add(manoJugador1);
+		manosJugadores.add(manoJugador2);
+		manosJugadores.add(manoJugador3);
+		manosJugadores.add(manoDealer);
+		//Impresión
+		for(ArrayList<Carta>  mano : manosJugadores) {
+			for(Carta cartaAux : mano) {
+				mostrarMensaje(cartaAux.toString());
+			}
+		}
+		
+	}
+
+	
 
 	private void calcularValorMano(ArrayList<Carta> mano, Carta carta, int i) {
 		// TODO Auto-generated method stub
@@ -535,51 +586,6 @@ public class ServidorBJ implements Runnable {
 		}
 		mostrarMensaje("Al final de determinarRondaJuego con jugador " + indexJugador);
 	}
-	private void reiniciarVariables() {
-		estadosJugadores = new String[4];
-		//jugadorEnTurno = 0;
-		contador = 0;
-		seTerminoRonda = false;
-		valorManos = new int[LONGITUD_COLA + 1]; // 3 jugadores y 1 dealer
-
-		mazo = new Baraja();
-		Carta carta;
-
-		// Creación de las manos
-		manoJugador1 = new ArrayList<Carta>();
-		manoJugador2 = new ArrayList<Carta>();
-		manoJugador3 = new ArrayList<Carta>();
-		manoDealer = new ArrayList<Carta>();
-
-		// reparto inicial jugadores 1,2 y 3
-		for (int i = 1; i <= 2; i++) {
-			// jugador 1
-			carta = mazo.getCarta();
-			manoJugador1.add(carta);
-			calcularValorMano(manoJugador1, carta, 0);
-			// jugador 2
-			carta = mazo.getCarta();
-			manoJugador2.add(carta);
-			calcularValorMano(manoJugador2, carta, 1);
-			// jugador 3
-			carta = mazo.getCarta();
-			manoJugador3.add(carta);
-			calcularValorMano(manoJugador3, carta, 2);
-		}
-		// Carta inicial Dealer
-		carta = mazo.getCarta();
-		manoDealer.add(carta);
-		calcularValorMano(manoDealer, carta, 3);
-
-		// gestiona las tres manos en un solo objeto para facilitar el manejo del hilo
-		manosJugadores = new ArrayList<ArrayList<Carta>>(LONGITUD_COLA + 1);// JUgadores y el dealer
-		manosJugadores.add(manoJugador1);
-		manosJugadores.add(manoJugador2);
-		manosJugadores.add(manoJugador3);
-		manosJugadores.add(manoDealer);
-		
-	}
-
 	public void iniciarDealer() {
 		// le toca turno al dealer.
 		Thread dealer = new Thread(this);
@@ -616,13 +622,13 @@ public class ServidorBJ implements Runnable {
 				e.printStackTrace();
 			}
 		}
-
+		
 		// Cambiar el estado de suspendido del hilo
 		private void setSuspendido(boolean suspendido) {
 			this.suspendido = suspendido;
 		}
-
 		@Override
+		
 		public void run() {
 			// TODO Auto-generated method stub
 			while(true) {
@@ -681,9 +687,9 @@ public class ServidorBJ implements Runnable {
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setMensaje("Inicias " + idJugadores[0] + " tienes " + valorManos[0]);
 				//	datosEnviar.setMensaje(idJugadores[0] + " 0 Apostaste: " + apuesta[0]);
-					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[0]);
-					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[1]);
-					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[2]);
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugadores()[0]);
+					mostrarMensaje("En " + indexJugador + " " +  datosEnviar.getIdJugadores()[1]);
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugadores()[2]);
 					enviarMensajeCliente(datosEnviar); // con esto construye la mesa
 					
 					despertarAlJugador2();
@@ -741,11 +747,17 @@ public class ServidorBJ implements Runnable {
 					datosEnviar.setIdJugadores(idJugadores);
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setMensaje("Inicias " + idJugadores[1] + " tienes " + valorManos[1]);
+					datosEnviar.setPrueba(false);
 					//datosEnviar.setMensaje(idJugadores[1] + " 1 Apostaste: " + apuesta[1]);
-					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[0]);
-					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[1]);
-					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[2]);
+					mostrarMensaje("En " + indexJugador +  " " + datosEnviar.getIdJugadores()[0]);
+					mostrarMensaje("En " + indexJugador + " " +  datosEnviar.getIdJugadores()[1]);
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugadores()[2]);
+					mostrarMensaje("Valores manos");
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getValorManos()[0]);
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getValorManos()[1]);
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getValorManos()[2]);
 					enviarMensajeCliente(datosEnviar);
+					
 					jugadorEnTurno = 0;
 				} else {
 					// Es jugador 2
@@ -776,9 +788,9 @@ public class ServidorBJ implements Runnable {
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setMensaje("Inicias " + idJugadores[2] + " tienes " + valorManos[2]);
 				//	datosEnviar.setMensaje(idJugadores[2] + " 2  Apostaste: " + apuesta[2]);
-					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[0]);
-					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[1]);
-					mostrarMensaje("En " + indexJugador + datosEnviar.getIdJugadores()[2]);
+					mostrarMensaje("En " + indexJugador + " " + datosEnviar.getIdJugadores()[0]);
+					mostrarMensaje("En " + indexJugador +  " " + datosEnviar.getIdJugadores()[1]);
+					mostrarMensaje("En " + indexJugador +   " " + datosEnviar.getIdJugadores()[2]);
 					enviarMensajeCliente(datosEnviar);
 
 					iniciarRondaJuego(); // despertar al jugador 1 para iniciar el juego
@@ -816,12 +828,14 @@ public class ServidorBJ implements Runnable {
 					mostrarMensaje("Esperando el click");
 					String aux = (String) in.readObject();
 					mostrarMensaje("Dio click el jugador " + aux);
+					
 					//Nuevo index jugador del jugador que hizo click
 					indexJugador = contador;		
 					//Posición en el array del jugador que hizo click
 					//int index = encontrarEnArray(idJugadores, aux);
 					idJugadores[contador] = aux;
 					jugadores[contador] = this;
+					
 					contador++;
 				} catch (ClassNotFoundException | IOException e) {
 					// TODO Auto-generated catch block
@@ -830,7 +844,7 @@ public class ServidorBJ implements Runnable {
 				mostrarMensaje("CONTADOR VALE: "+ contador); 
 				mostrarMensaje(indexJugador  + " cambiado, salió del pinche while");
 				if(contador == 3) {
-					mostrarMensaje(indexJugador + " VOY A REINICIAR LAS VARIABLES" + seTerminoRonda); 
+					mostrarMensaje(indexJugador + " VOY A REINICIAR LAS VARIABLES " + seTerminoRonda); 
 					reiniciarVariables();			
 				}
 				// cerrar conexión
