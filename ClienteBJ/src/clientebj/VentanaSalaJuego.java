@@ -130,8 +130,10 @@ public class VentanaSalaJuego extends JInternalFrame {
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		add(yoFull, constraints);
-		
+		//Botón para jugar otra ronda al lado derecho inferior e inicia deshabilitado
 		otraRonda = new JButton("Otra ronda");
+		otraRonda.addActionListener(escucha);
+		otraRonda.setEnabled(false);
 		panelOtraRonda = new JPanel(new BorderLayout());
 		panelOtraRonda.add(otraRonda, BorderLayout.EAST);
 		constraints.gridx = 2;
@@ -145,7 +147,18 @@ public class VentanaSalaJuego extends JInternalFrame {
 		pedir.setEnabled(turno);
 		plantar.setEnabled(turno);
 	}
-
+	
+	//Activa o desactiva el botón para jugar otra ronda 
+	public void activarBotonOtraRonda(boolean activar) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				otraRonda.setEnabled(activar);
+			}
+			
+		});
+	}
 	// Se llama cuando se crea la sala de juego por primera vez
 	public void pintarCartasInicio(DatosBlackJack datosRecibidos) {
 		System.out.println("pintarcartasinicio");
@@ -248,10 +261,14 @@ public class VentanaSalaJuego extends JInternalFrame {
 			if (actionEvent.getSource() == pedir) {
 				// enviar pedir carta al servidor
 				enviarDatos("pedir");
-			} else {
+			} else if(actionEvent.getSource() == plantar){
 				// enviar plantar al servidor
 				enviarDatos("plantar");
 				activarBotones(false);
+			}  //Otra ronda
+			else {
+				ClienteBlackJack cliente = (ClienteBlackJack) getTopLevelAncestor();
+				cliente.reiniciarJuego();
 			}
 		}
 	}

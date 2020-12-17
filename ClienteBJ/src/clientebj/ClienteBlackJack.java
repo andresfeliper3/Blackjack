@@ -246,24 +246,8 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 					mostrarMensajes("El mensaje es " + datosRecibidos.getMensaje());
 					
 					if (!datosRecibidos.isEnJuego()) {
-						
-						int opcion = JOptionPane.showConfirmDialog(this, "Desea jugar otra vez?", "Jugar otra ronda",
-								JOptionPane.YES_NO_OPTION);
-						
-						if (opcion == JOptionPane.YES_OPTION) {
-							//REINICIAR JUEGO
-							ventanaSalaJuego.cerrarVentanaSalaJuego();
-							ventanaEspera = new VentanaEspera(idYo);
-							add(ventanaEspera);
-							repetirRonda = true;
-							//Avisando al servidor
-							enviarMensajeServidor(idYo);
-							break;
-						} else {
-							// Cerra todo
-							repetirRonda = false;
-							//BREAK?
-						}
+						//Activar el botón de reinicio
+						ventanaSalaJuego.activarBotonOtraRonda(true);
 					}
 
 				} catch (ClassNotFoundException e) {
@@ -299,6 +283,14 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		});
 	}
 
+	public void reiniciarJuego() {
+		ventanaSalaJuego.cerrarVentanaSalaJuego();
+		ventanaEspera = new VentanaEspera(idYo);
+		add(ventanaEspera);
+		repetirRonda = true;
+		//Avisando al servidor
+		enviarMensajeServidor(idYo);
+	}
 	private void cerrarConexion() {
 		// TODO Auto-generated method stub
 		try {
