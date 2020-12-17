@@ -15,6 +15,47 @@ public class DatosBlackJack implements Serializable{
 	private boolean enJuego = true;
 	private boolean prueba = true;
 	private String idJugador1, idJugador2, idJugador3;
+	private int capitalJugador1,capitalJugador2,capitalJugador3;
+	
+	
+	
+	public void setCapitalParcial(int capitalJugador, int index) {
+		
+		if(index == 0) {
+			
+			setCapitalJugador1(capitalJugador);
+		}if(index == 1) {
+			
+			setCapitalJugador2(capitalJugador);
+		}else {
+			
+			setCapitalJugador3(capitalJugador);
+		}
+	}
+	
+	public int getCapitalJugador1() {
+		return capitalJugador1;
+	}
+
+	public void setCapitalJugador1(int capitalJugador1) {
+		this.capitalJugador1 = capitalJugador1;
+	}
+
+	public int getCapitalJugador2() {
+		return capitalJugador2;
+	}
+
+	public void setCapitalJugador2(int capitalJugador2) {
+		this.capitalJugador2 = capitalJugador2;
+	}
+
+	public int getCapitalJugador3() {
+		return capitalJugador3;
+	}
+
+	public void setCapitalJugador3(int capitalJugador3) {
+		this.capitalJugador3 = capitalJugador3;
+	}
 	private int count=0;
 	
 	public int getCount() {

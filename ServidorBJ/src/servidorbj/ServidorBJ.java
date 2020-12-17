@@ -50,6 +50,7 @@ public class ServidorBJ implements Runnable {
 	private int contador=0;
 	private int orden =0;
 	private int ronda=0;
+	private int capitalInicial = 1000;
 	// private boolean iniciarJuego;
 	private Baraja mazo;
 	private ArrayList<ArrayList<Carta>> manosJugadores;
@@ -134,6 +135,11 @@ public class ServidorBJ implements Runnable {
 		estadosJugadores = new String[4];
 		//jugadorEnTurno = 0;
 		contador = 0;
+		
+		capital[0] -=10;
+		capital[1] -=10;
+		capital[2] -=10;
+		
 		seTerminoRonda = false;
 		valorManos = new int[LONGITUD_COLA + 1]; // 3 jugadores y 1 dealer
 
@@ -202,10 +208,10 @@ public class ServidorBJ implements Runnable {
 			revisarAsMano(mano, i);
 		}
 
-		if (mano.size() == 2 && valorManos[i] == 21) {// Guarda si el jugador tiene un Black Jack, es decir un As, y una
-														// J, Q, K
+		if (mano.size() == 2 && valorManos[i] == 21 ) {// Guarda si el jugador tiene un Black Jack, es decir un As, y una
+														// J, Q, K, 10
 
-			estadosJugadores[i] = "blackJack";
+			estadosJugadores[i] = "blackjack";
 
 		} else {
 
@@ -332,7 +338,10 @@ public class ServidorBJ implements Runnable {
 			calcularValorMano(manosJugadores.get(indexJugador), carta, indexJugador);
 
 			datosEnviar = new DatosBlackJack();
-			datosEnviar.setCapitalJugadores(capital);
+			datosEnviar.setCapitalJugador1(capital[0]);
+			datosEnviar.setCapitalJugador2(capital[1]);
+			datosEnviar.setCapitalJugador3(capital[2]);
+			//datosEnviar.setCapitalJugadores(capital);
 			datosEnviar.setIdJugadores(idJugadores);
 			datosEnviar.setValorManos(valorManos);
 			datosEnviar.setCarta(carta);
@@ -356,7 +365,10 @@ public class ServidorBJ implements Runnable {
 				if (jugadorEnTurno == 0) {
 
 					datosEnviar = new DatosBlackJack();
-					datosEnviar.setCapitalJugadores(capital);
+					datosEnviar.setCapitalJugador1(capital[0]);
+					datosEnviar.setCapitalJugador2(capital[1]);
+					datosEnviar.setCapitalJugador3(capital[2]);
+					//datosEnviar.setCapitalJugadores(capital);
 					datosEnviar.setIdJugadores(idJugadores);
 					datosEnviar.setValorManos(valorManos);
 					// avisa cuál es el jugador siguiente
@@ -382,7 +394,10 @@ public class ServidorBJ implements Runnable {
 					}
 				} else if (jugadorEnTurno == 1) {
 					datosEnviar = new DatosBlackJack();
-					datosEnviar.setCapitalJugadores(capital);
+					datosEnviar.setCapitalJugador1(capital[0]);
+					datosEnviar.setCapitalJugador2(capital[1]);
+					datosEnviar.setCapitalJugador3(capital[2]);
+					//datosEnviar.setCapitalJugadores(capital);
 					datosEnviar.setIdJugadores(idJugadores);
 					datosEnviar.setValorManos(valorManos);
 					// avisa cuál es el jugador siguiente
@@ -409,7 +424,10 @@ public class ServidorBJ implements Runnable {
 				} else {// era el jugador 3 entonces se debe iniciar el dealer
 						// notificar a todos que le toca jugar al dealer
 					datosEnviar = new DatosBlackJack();
-					datosEnviar.setCapitalJugadores(capital);
+					datosEnviar.setCapitalJugador1(capital[0]);
+					datosEnviar.setCapitalJugador2(capital[1]);
+					datosEnviar.setCapitalJugador3(capital[2]);
+					//datosEnviar.setCapitalJugadores(capital);
 					datosEnviar.setIdJugadores(idJugadores);
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setJugador("dealer");
@@ -439,7 +457,10 @@ public class ServidorBJ implements Runnable {
 		} else {
 			// jugador en turno plantó
 			datosEnviar = new DatosBlackJack();
-			datosEnviar.setCapitalJugadores(capital);
+			datosEnviar.setCapitalJugador1(capital[0]);
+			datosEnviar.setCapitalJugador2(capital[1]);
+			datosEnviar.setCapitalJugador3(capital[2]);
+			//datosEnviar.setCapitalJugadores(capital);
 			datosEnviar.setIdJugadores(idJugadores);
 			datosEnviar.setValorManos(valorManos);
 			datosEnviar.setJugador(idJugadores[indexJugador]);
@@ -454,7 +475,10 @@ public class ServidorBJ implements Runnable {
 			if (jugadorEnTurno == 0) {
 
 				datosEnviar = new DatosBlackJack();
-				datosEnviar.setCapitalJugadores(capital);
+				datosEnviar.setCapitalJugador1(capital[0]);
+				datosEnviar.setCapitalJugador2(capital[1]);
+				datosEnviar.setCapitalJugador3(capital[2]);
+				//datosEnviar.setCapitalJugadores(capital);
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setJugador(idJugadores[1]);
@@ -479,7 +503,10 @@ public class ServidorBJ implements Runnable {
 			} else if (jugadorEnTurno == 1) {
 
 				datosEnviar = new DatosBlackJack();
-				datosEnviar.setCapitalJugadores(capital);
+				datosEnviar.setCapitalJugador1(capital[0]);
+				datosEnviar.setCapitalJugador2(capital[1]);
+				datosEnviar.setCapitalJugador3(capital[2]);
+				//datosEnviar.setCapitalJugadores(capital);
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setJugador(idJugadores[2]);
@@ -504,7 +531,10 @@ public class ServidorBJ implements Runnable {
 			} else {
 				// notificar a todos que le toca jugar al dealer
 				datosEnviar = new DatosBlackJack();
-				datosEnviar.setCapitalJugadores(capital);
+				datosEnviar.setCapitalJugador1(capital[0]);
+				datosEnviar.setCapitalJugador2(capital[1]);
+				datosEnviar.setCapitalJugador3(capital[2]);
+				//datosEnviar.setCapitalJugadores(capital);
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setJugador("dealer");
@@ -547,65 +577,121 @@ public class ServidorBJ implements Runnable {
 		 * EMPATE Ambos blackjack Ambos mismo valor Ambos pierden3
 		 */
 		if(indexJugador == 3) {
+			
 			for (int i = 0; i < 3; i++) {
-				// Empate
-				if ((estadosJugadores[i].equals(estadosJugadores[3]) && estadosJugadores[i].equals("blackjack"))
+				
+					// Empate
+					if ((estadosJugadores[i].equals(estadosJugadores[3]) && estadosJugadores[i].equals("blackjack"))
 						|| (estadosJugadores[i].equals(estadosJugadores[3]) && estadosJugadores[i].equals("voló"))
 						|| (valorManos[i] == valorManos[3])) {
-					// Se le devuelve la capital
-					capital[i]= 200;
-					datosEnviar.setMensaje("Empató el jugador " + idJugadores[i] + " con el dealer");
-				}
-				// Vuela el dealer
-				else if (estadosJugadores[3].equals("voló")) {
-					// Gana el que no voló
-					capital[i]= 200;
-					datosEnviar.setMensaje("Gana el jugador " + idJugadores[i] + " porque el dealer voló");
-				}
-				// Vuelva el jugador
-				else if (estadosJugadores[i].equals("voló")) {
-					capital[i]= 200;
-					datosEnviar.setMensaje("Gana el dealer, porque " + idJugadores[i] + " voló");
-				}
-				// El dealer tiene blackjack
-				else if (estadosJugadores[3].equals("blackjack")) {
-					// Gana el que tenga blackjack
-					capital[i]= 200;
-					datosEnviar.setMensaje("Gana el dealer y tiene blackjack, pierde " + idJugadores[i]);
-				}
-				// El jugador tiene blackjack
-				else if (estadosJugadores[i].equals("blackjack")) {
-					capital[i]= 200;
-					datosEnviar.setMensaje("Gana el jugador" + idJugadores[i] + " y tiene blackjack");
-
-				}
-				// Gana quien esté más cerca del 21
-				else if (valorManos[i] > valorManos[3]) {
-					capital[i]= 200;
-					datosEnviar.setMensaje("Gana el jugador " + idJugadores[i] + " pues tiene " + valorManos[i]);
-				} else {
-					capital[i]= 200;
-					datosEnviar.setMensaje("Gana el dealer, porque " + idJugadores[i] + " tiene " + valorManos[i]
-							+ " y el dealer tiene " + valorManos[3]);
-				}
-				datosEnviar.setIdJugadores(idJugadores);
-				datosEnviar.setJugador(idJugadores[i]);
-				datosEnviar.setJugadorEstado("finalizar");
-				datosEnviar.setEnJuego(false);
+					// Vuela el dealer
+						
+							
+					}// El jugador tiene blackjack
+					else if (estadosJugadores[i].equals("blackjack")) {
+						capital[i]+= 15;
+						
+					}else if (estadosJugadores[3].equals("voló")) {
+						// Gana el que no voló
+						capital[i] += 10;
 				
-				mostrarMensaje("El booleano enJuego es " + datosEnviar.isEnJuego());
-
+					}
+					// Vuela el jugador
+					else if (estadosJugadores[i].equals("voló")) {
+						capital[i]-= 10;
+	
+					}
+					// El dealer tiene blackjack
+					else if (estadosJugadores[3].equals("blackjack")) {
+						// Gana el que tenga blackjack
+						capital[i]-= 10;
 				
+					}
+
+					// Gana quien esté más cerca del 21
+					else if (valorManos[i] > valorManos[3]) {
+						capital[i]+= 10;
+					
+					} else {
+						capital[i]-= 10;
+
+					}
 			}
 			
-			datosEnviar.setCapitalJugadores(capital);
-			mostrarMensaje("CAPITAL JUGADORES: ASDASDASDASDASD" + datosEnviar.getCapitalJugadores()[0] + ", " + datosEnviar.getCapitalJugadores()[1] + ", " + datosEnviar.getCapitalJugadores()[2] );
-			jugadores[0].enviarMensajeCliente(datosEnviar);
-			jugadores[0].setSuspendido(true);
-			jugadores[1].enviarMensajeCliente(datosEnviar);
-			jugadores[1].setSuspendido(true);
-			jugadores[2].enviarMensajeCliente(datosEnviar);
-			jugadores[2].setSuspendido(true);
+			 datosEnviar.setCapitalJugador1(capital[0]);
+			 datosEnviar.setCapitalJugador2(capital[1]);
+			 datosEnviar.setCapitalJugador3(capital[2]);
+			 
+			for (int i = 0; i < 3; i++) {
+					
+					// Empate
+					if ((estadosJugadores[i].equals(estadosJugadores[3]) && estadosJugadores[i].equals("blackjack"))
+							|| (estadosJugadores[i].equals(estadosJugadores[3]) && estadosJugadores[i].equals("voló"))
+							|| (valorManos[i] == valorManos[3])) {
+						// Se le devuelve la capital
+						
+						datosEnviar.setMensaje("Empató el jugador " + idJugadores[i] + " con el dealer");
+					}
+					// El jugador tiene blackjack
+					else if (estadosJugadores[i].equals("blackjack")) {
+					
+						datosEnviar.setMensaje("Gana el jugador" + idJugadores[i] + " y tiene blackjack");
+	
+					}
+					// Vuela el dealer
+					else if (estadosJugadores[3].equals("voló")) {
+						// Gana el que no voló
+				
+						datosEnviar.setMensaje("Gana el jugador " + idJugadores[i] + " porque el dealer voló");
+					}
+					// Vuela el jugador
+					else if (estadosJugadores[i].equals("voló")) {
+
+						datosEnviar.setMensaje("Gana el dealer, porque " + idJugadores[i] + " voló");
+					}
+					// El dealer tiene blackjack
+					else if (estadosJugadores[3].equals("blackjack")) {
+						// Gana el que tenga blackjack
+					
+						datosEnviar.setMensaje("Gana el dealer y tiene blackjack, pierde " + idJugadores[i]);
+					}
+					// Gana quien esté más cerca del 21
+					else if (valorManos[i] > valorManos[3]) {
+					
+						datosEnviar.setMensaje("Gana el jugador " + idJugadores[i] + " pues tiene " + valorManos[i]);
+					} else {
+						
+						datosEnviar.setMensaje("Gana el dealer, porque " + idJugadores[i] + " tiene " + valorManos[i]
+								+ " y el dealer tiene " + valorManos[3]);
+					}
+					 
+					datosEnviar.setIdJugadores(idJugadores);
+					datosEnviar.setJugador(idJugadores[i]);
+					datosEnviar.setJugadorEstado("finalizar");
+					datosEnviar.setEnJuego(false);
+
+					mostrarMensaje("El booleano enJuego es " + datosEnviar.isEnJuego());
+					
+					jugadores[i].setSuspendido(true);
+					jugadores[i].enviarMensajeCliente(datosEnviar);
+					
+			}
+
+	
+			
+			
+
+			 
+			//datosEnviar.setCapitalJugadores(capital);
+			//mostrarMensaje("CAPITAL JUGADORES: ASDASDASDASDASD" + datosEnviar.getCapitalJugadores()[0] + ", " + datosEnviar.getCapitalJugadores()[1] + ", " + datosEnviar.getCapitalJugadores()[2] );
+			/*
+			 * jugadores[0].enviarMensajeCliente(datosEnviar);
+			 * jugadores[0].setSuspendido(true);
+			 * jugadores[1].enviarMensajeCliente(datosEnviar);
+			 * jugadores[1].setSuspendido(true);
+			 * jugadores[2].enviarMensajeCliente(datosEnviar);
+			 * jugadores[2].setSuspendido(true);
+			 */
 			
 			// Dealer despierta los hilos.
 			seTerminoRonda = true;
@@ -720,7 +806,10 @@ public class ServidorBJ implements Runnable {
 					datosEnviar.setManoJugador1(manosJugadores.get(0));
 					datosEnviar.setManoJugador2(manosJugadores.get(1));
 					datosEnviar.setManoJugador3(manosJugadores.get(2));
-					datosEnviar.setCapitalJugadores(capital);
+					datosEnviar.setCapitalJugador1(capital[0]);
+					datosEnviar.setCapitalJugador2(capital[1]);
+					datosEnviar.setCapitalJugador3(capital[2]);
+					//datosEnviar.setCapitalJugadores(capital);
 					datosEnviar.setIdJugadores(idJugadores);
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setMensaje("Inicias " + idJugadores[0] + " tienes " + valorManos[0]);
@@ -784,7 +873,10 @@ public class ServidorBJ implements Runnable {
 					datosEnviar.setManoJugador1(manosJugadores.get(0));
 					datosEnviar.setManoJugador2(manosJugadores.get(1));
 					datosEnviar.setManoJugador3(manosJugadores.get(2));
-					datosEnviar.setCapitalJugadores(capital);
+					datosEnviar.setCapitalJugador1(capital[0]);
+					datosEnviar.setCapitalJugador2(capital[1]);
+					datosEnviar.setCapitalJugador3(capital[2]);
+					//datosEnviar.setCapitalJugadores(capital);
 					datosEnviar.setIdJugadores(idJugadores);
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setMensaje("Inicias " + idJugadores[1] + " tienes " + valorManos[1]);
@@ -818,7 +910,10 @@ public class ServidorBJ implements Runnable {
 					datosEnviar.setManoJugador2(manosJugadores.get(1));
 					datosEnviar.setManoJugador3(manosJugadores.get(2));
 					mostrarMensaje("CAPITAL oeoeoOEOEOEOEOEOEOEOEOEOEOEOEOEOEOEO: " + capital[0] + ", " + capital[1] + ", " + capital[2]);
-					datosEnviar.setCapitalJugadores(capital);
+					datosEnviar.setCapitalJugador1(capital[0]);
+					datosEnviar.setCapitalJugador2(capital[1]);
+					datosEnviar.setCapitalJugador3(capital[2]);
+					//datosEnviar.setCapitalJugadores(capital);
 					datosEnviar.setIdJugadores(idJugadores);
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setMensaje("Inicias " + idJugadores[2] + " tienes " + valorManos[2]);
@@ -950,10 +1045,10 @@ public class ServidorBJ implements Runnable {
 				}
 			}
 			// envia la jugada a los otros jugadores
-			capital[0] = 200;
-			capital[1] = 200;
-			capital[2] = 200;
-			datosEnviar.setCapitalJugadores(capital);
+			datosEnviar.setCapitalJugador1(capital[0]);
+			datosEnviar.setCapitalJugador2(capital[1]);
+			datosEnviar.setCapitalJugador3(capital[2]);
+			//datosEnviar.setCapitalJugadores(capital);
 			datosEnviar.setCarta(carta);
 			jugadores[0].enviarMensajeCliente(datosEnviar);
 			jugadores[1].enviarMensajeCliente(datosEnviar);

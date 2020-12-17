@@ -174,7 +174,7 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		// mandar nombre jugador
 		mostrarMensajes("Jugador envio nombre " + idYo);
 		enviarMensajeServidor(idYo);
-		capital -= 10;
+		//capital-=10;
 		enviarApuestaServidor(capital);
 		// procesar comunicación con el ServidorBlackJack
 		iniciarHilo();
@@ -195,31 +195,31 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 				
 				// lee los datos con los que construye la mesa
 				if (datosRecibidos.getIdJugadores()[0].equals(idYo)) {
-					capitalYo = datosRecibidos.getCapitalJugadores()[0];
+					capitalYo = datosRecibidos.getCapitalJugador1();
 
 					otroJugador = datosRecibidos.getIdJugadores()[1];
-					capitalOtroJugador = datosRecibidos.getCapitalJugadores()[1];
+					capitalOtroJugador = datosRecibidos.getCapitalJugador2();
 
 					ultimoJugador = datosRecibidos.getIdJugadores()[2];
-					capitalUltimoJugador = datosRecibidos.getCapitalJugadores()[2];
+					capitalUltimoJugador = datosRecibidos.getCapitalJugador3();
 					System.out.println("EL JUGADOR " + idYo + " ESTÁ EN LA POSICIÓN 0");
 					turno = true;
 				} else if (datosRecibidos.getIdJugadores()[1].equals(idYo)) {
-					capitalYo = datosRecibidos.getCapitalJugadores()[1];
+					capitalYo = datosRecibidos.getCapitalJugador2();
 
 					otroJugador = datosRecibidos.getIdJugadores()[0];
-					capitalOtroJugador = datosRecibidos.getCapitalJugadores()[0];
+					capitalOtroJugador = datosRecibidos.getCapitalJugador1();
 
 					ultimoJugador = datosRecibidos.getIdJugadores()[2];
-					capitalUltimoJugador = datosRecibidos.getCapitalJugadores()[2];
+					capitalUltimoJugador = datosRecibidos.getCapitalJugador3();
 				} else { // Yo estoy en la posición 2
-					capitalYo = datosRecibidos.getCapitalJugadores()[2];
+					capitalYo = datosRecibidos.getCapitalJugador3();
 
 					otroJugador = datosRecibidos.getIdJugadores()[0];
-					capitalOtroJugador = datosRecibidos.getCapitalJugadores()[0];
+					capitalOtroJugador = datosRecibidos.getCapitalJugador1();
 
 					ultimoJugador = datosRecibidos.getIdJugadores()[1];
-					capitalUltimoJugador = datosRecibidos.getCapitalJugadores()[1];
+					capitalUltimoJugador = datosRecibidos.getCapitalJugador2();
 
 				}
 
@@ -239,7 +239,7 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 					
 					mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
 					mostrarMensajes(datosRecibidos.getJugador() + " " + datosRecibidos.getJugadorEstado());
-					mostrarMensajes("CAPITAL JUGADORES: CLIENTE" + datosRecibidos.getCapitalJugadores()[0] + ", " + datosRecibidos.getCapitalJugadores()[1] + ", " + datosRecibidos.getCapitalJugadores()[2] );
+					mostrarMensajes("CAPITAL JUGADORES: CLIENTE" + datosRecibidos.getCapitalJugador1() + ", " + datosRecibidos.getCapitalJugador2() + ", " + datosRecibidos.getCapitalJugador3() );
 					ventanaSalaJuego.pintarTurno(datosRecibidos);
 					
 					mostrarMensajes("El booleano enJuego recibido por cliente es " + datosRecibidos.isEnJuego());
