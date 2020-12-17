@@ -2,8 +2,8 @@
  *                  Andrés Felipe Rincón    - 1922840
  * Correos: jose.david.barona@correounivalle.edu.co 
  *             andres.rincon.lopez@correounivalle.edu.co
- * Mini proyecto 3: Poker
- * Fecha: 25/11/2020
+ * Mini proyecto 4: Black Jack
+ * Fecha: 16/12/2020
  * 
  * */
 package clientebj;

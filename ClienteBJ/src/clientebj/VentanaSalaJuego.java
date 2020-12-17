@@ -1,3 +1,11 @@
+/* Autores: Jose David Barona Hernández - 1727590
+ *                  Andrés Felipe Rincón    - 1922840
+ * Correos: jose.david.barona@correounivalle.edu.co 
+ *             andres.rincon.lopez@correounivalle.edu.co
+ * Mini proyecto 4: Black Jack
+ * Fecha: 16/12/2020
+ * 
+ * */
 package clientebj;
 
 import java.awt.BorderLayout;
@@ -6,13 +14,11 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,6 +30,10 @@ import javax.swing.border.TitledBorder;
 
 import comunes.DatosBlackJack;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VentanaSalaJuego.
+ */
 public class VentanaSalaJuego extends JInternalFrame {
 
 	private PanelJugador dealer, yo, jugador2, jugador3;
@@ -34,13 +44,25 @@ public class VentanaSalaJuego extends JInternalFrame {
 	private String yoId, jugador2Id, jugador3Id;
 	private Escucha escucha;
 
-	public VentanaSalaJuego(String yoId,int apuestaYo, String jugador2Id,int apuesta2, String jugador3Id, int apuesta3, int desktop_Width,int desktop_height) {
+	/**
+	 * Instantiates a new ventana sala juego.
+	 *
+	 * @param yoId the yo id
+	 * @param capitalYo the capital yo
+	 * @param jugador2Id the jugador 2 id
+	 * @param capital2 the capital 2
+	 * @param jugador3Id the jugador 3 id
+	 * @param capital3 the capital 3
+	 * @param desktop_Width the desktop width
+	 * @param desktop_height the desktop height
+	 */
+	public VentanaSalaJuego(String yoId,int capitalYo, String jugador2Id,int capital2, String jugador3Id, int capital3, int desktop_Width,int desktop_height) {
 		this.yoId = yoId;
 		this.jugador2Id = jugador2Id;
 		this.jugador3Id = jugador3Id;
 		this.setBackground(Color.GREEN);
 		
-		initGUI(apuestaYo, apuesta2,apuesta3);
+		initGUI(capitalYo, capital2,capital3);
 
 		// default window settings
 		this.setTitle("Sala de juego BlackJack - Jugador: " + yoId);
@@ -51,7 +73,14 @@ public class VentanaSalaJuego extends JInternalFrame {
 		this.show();
 	}
 
-	private void initGUI(int apuestaYo,int apuesta2,int apuesta3) {
+	/**
+	 * Inits the GUI.
+	 *	método encargado de inicializar los gráficos de la ventana sala juego
+	 * @param capitalYo the capital yo
+	 * @param capital2 the capital 2
+	 * @param capital3 the capital 3
+	 */
+	private void initGUI(int capitalYo,int capital2,int capital3) {
 		// TODO Auto-generated method stub
 		// set up JFrame Container y Layout
 		setLayout(new GridBagLayout());
@@ -62,7 +91,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 		// Set up JComponents
 		panelDealer = new JPanel();
-		dealer = new PanelJugador("Dealer",99999);
+		dealer = new PanelJugador("Dealer",10000);
 		panelDealer.setBackground(Color.GREEN);
 		panelDealer.add(dealer);
 		constraints.gridx = 1;
@@ -70,7 +99,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 		add(panelDealer, constraints);
 
 		panelJugador2 = new JPanel();
-		jugador2 = new PanelJugador(jugador2Id,apuesta2);
+		jugador2 = new PanelJugador(jugador2Id,capital2);
 		panelJugador2.setBackground(Color.GREEN);
 		panelJugador2.add(jugador2);
 		constraints.gridx = 2;
@@ -78,7 +107,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 		add(panelJugador2, constraints);
 
 		panelJugador3 = new JPanel();
-		jugador3 = new PanelJugador(jugador3Id,apuesta3);
+		jugador3 = new PanelJugador(jugador3Id,capital3);
 		panelJugador3.setBackground(Color.GREEN);
 		panelJugador3.add(jugador3);
 		constraints.gridx = 1;
@@ -107,7 +136,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 		panelYo = new JPanel();
 		panelYo.setLayout(new BorderLayout());
-		yo = new PanelJugador(yoId,apuestaYo);
+		yo = new PanelJugador(yoId,capitalYo);
 		panelYo.setBackground(Color.GREEN);
 		panelYo.add(yo);
 
@@ -143,11 +172,21 @@ public class VentanaSalaJuego extends JInternalFrame {
 			
 	}
 
+	/**
+	 * Activar botones.
+	 *
+	 * @param turno the turno
+	 */
 	public void activarBotones(boolean turno) {
 		pedir.setEnabled(turno);
 		plantar.setEnabled(turno);
 	}
 	
+	/**
+	 * Activar boton otra ronda.
+	 *
+	 * @param activar the activar
+	 */
 	//Activa o desactiva el botón para jugar otra ronda 
 	public void activarBotonOtraRonda(boolean activar) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -159,13 +198,15 @@ public class VentanaSalaJuego extends JInternalFrame {
 			
 		});
 	}
+	
+	/**
+	 * Pintar cartas inicio.
+	 *	Función encargada de pintar las manos iniciales de los jugadores
+	 * @param datosRecibidos the datos recibidos
+	 */
 	// Se llama cuando se crea la sala de juego por primera vez
 	public void pintarCartasInicio(DatosBlackJack datosRecibidos) {
-		System.out.println("pintarcartasinicio");
 		//MENSAJE: Le están llegando en el orden incorrecto al reiniciar
-		System.out.println(datosRecibidos.getIdJugadores()[0]);
-		System.out.println(datosRecibidos.getIdJugadores()[1]);
-		System.out.println(datosRecibidos.getIdJugadores()[2]);
 		if (datosRecibidos.getIdJugadores()[0].equals(yoId)) {// Si yo estoy en la posición 0
 			yo.pintarCartasInicio(datosRecibidos.getManoJugador1());// pinte cartas de inicio del jugador yo
 			jugador2.pintarCartasInicio(datosRecibidos.getManoJugador2());// pinte las cartas del jugador 2
@@ -184,7 +225,11 @@ public class VentanaSalaJuego extends JInternalFrame {
 		areaMensajes.append(datosRecibidos.getMensaje() + "\n");
 	}
 
-	// ver min 36
+	/**
+	 * Pintar turno.
+	 *	Método encargado de pintar lo necesario en el turno de juego
+	 * @param datosRecibidos the datos recibidos
+	 */
 	public void pintarTurno(DatosBlackJack datosRecibidos) {
 		areaMensajes.append(datosRecibidos.getMensaje() + "\n");
 		ClienteBlackJack cliente = (ClienteBlackJack) this.getTopLevelAncestor();//
@@ -240,21 +285,44 @@ public class VentanaSalaJuego extends JInternalFrame {
 		}
 	}
 	
+	/**
+	 * Enviar datos.
+	 * Método encargado de enviarle datos al cliente
+	 * @param mensaje the mensaje
+	 */
 	private void enviarDatos(String mensaje) {
 		// TODO Auto-generated method stub
 		ClienteBlackJack cliente = (ClienteBlackJack) this.getTopLevelAncestor();
 		cliente.enviarMensajeServidor(mensaje);
 	}
 	
+	/**
+	 * Cierra la ventana sala juego eliminando todos sus componentes
+	 * Cerrar ventana sala juego.
+	 */
 	public void cerrarVentanaSalaJuego() {
 		this.dispose();
 	}
+	
+	/**
+	 * Gets the container frames.
+	 *
+	 * @return the container frames
+	 */
 	public Container getContainerFrames() {
 		return this.getParent();
 	}
     
+	/**
+	 * The Class Escucha.
+	 */
 	private class Escucha implements ActionListener {
 
+		/**
+		 * Action performed.
+		 *
+		 * @param actionEvent the action event
+		 */
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 			// TODO Auto-generated method stub
@@ -268,7 +336,15 @@ public class VentanaSalaJuego extends JInternalFrame {
 			}  //Otra ronda
 			else {
 				ClienteBlackJack cliente = (ClienteBlackJack) getTopLevelAncestor();
-				cliente.reiniciarJuego();
+				int opcion = JOptionPane.showConfirmDialog(null, "Desea jugar otra vez?", "Jugar otra ronda",
+						JOptionPane.YES_NO_OPTION);
+				
+				if (opcion == JOptionPane.YES_OPTION) {
+					
+					cliente.reiniciarJuego();
+				}else {
+					cliente.cerrarConexion();
+				}
 			}
 		}
 	}

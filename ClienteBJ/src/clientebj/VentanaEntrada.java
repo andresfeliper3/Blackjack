@@ -1,3 +1,11 @@
+/* Autores: Jose David Barona Hernández - 1727590
+ *                  Andrés Felipe Rincón    - 1922840
+ * Correos: jose.david.barona@correounivalle.edu.co 
+ *             andres.rincon.lopez@correounivalle.edu.co
+ * Mini proyecto 4: Black Jack
+ * Fecha: 16/12/2020
+ * 
+ * */
 package clientebj;
 
 import java.awt.BorderLayout;
@@ -12,6 +20,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VentanaEntrada.
+ */
 public class VentanaEntrada extends JInternalFrame {
 	
 	private JLabel bienvenida, labelNombre;
@@ -23,6 +35,11 @@ public class VentanaEntrada extends JInternalFrame {
 	
 	private Escucha escucha;
 	
+	/**
+	 * Instantiates a new ventana entrada.
+	 *
+	 * @param cliente the cliente
+	 */
 	public VentanaEntrada(ClienteBlackJack cliente) {
 		this.cliente = cliente;
 		initInternalFrame();
@@ -34,6 +51,9 @@ public class VentanaEntrada extends JInternalFrame {
 		this.show();
 	}
 
+	/**
+	 * Inits the internal frame.
+	 */
 	private void initInternalFrame() {
 		// TODO Auto-generated method stub
 		escucha = new Escucha();
@@ -50,15 +70,32 @@ public class VentanaEntrada extends JInternalFrame {
 		add(ingreso,BorderLayout.CENTER);
 	}
 	
+	/**
+	 * Gets the container frames.
+	 *
+	 * @return the container frames
+	 */
 	private Container getContainerFrames() {
 		return this.getParent();
 	}
  
+	/**
+	 * Cerrar ventana entrada.
+	 */
 	private void cerrarVentanaEntrada() {
 		this.dispose();
 	}
 	
+	/**
+	 * The Class Escucha.
+	 */
 	private class Escucha implements ActionListener{
+		
+		/**
+		 * Action performed.
+		 *
+		 * @param arg0 the arg 0
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub

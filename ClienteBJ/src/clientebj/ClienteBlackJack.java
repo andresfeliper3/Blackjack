@@ -1,13 +1,17 @@
+/* Autores: Jose David Barona Hernández - 1727590
+ *                  Andrés Felipe Rincón    - 1922840
+ * Correos: jose.david.barona@correounivalle.edu.co 
+ *             andres.rincon.lopez@correounivalle.edu.co
+ * Mini proyecto 4: Black Jack
+ * Fecha: 16/12/2020
+ * 
+ * */
+
 package clientebj;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+
 import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,21 +19,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
+
 
 import comunes.DatosBlackJack;
 
@@ -38,6 +32,7 @@ import comunes.DatosBlackJack;
  * The Class ClienteBlackJack.
  * 
  */
+
 public class ClienteBlackJack extends JFrame implements Runnable {
 	// Constantes de Interfaz Grafica
 	public static final int WIDTH = 670;
@@ -87,14 +82,9 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 	 * Inits the GUI.
 	 */
 	private void initGUI() {
-		// set up JFrame Container y Layout
 
-		// Create Listeners objects
-
-		// Create Control objects
 		turno = false;
 		// Set up JComponents
-
 		this.setBackground(SystemColor.activeCaption);
 		containerInternalFrames = new JDesktopPane();
 		containerInternalFrames.setOpaque(false);
@@ -102,35 +92,66 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		adicionarInternalFrame(new VentanaEntrada(this));
 	}
 
+	/**
+	 * Gets the desktop width.
+	 *	
+	 * @return the desktop width
+	 */
 	public int getDesktopWidth() {
 
 		return containerInternalFrames.getWidth();
 	}
 
+	/**
+	 * Gets the desktop height.
+	 *
+	 * @return the desktop height
+	 */
 	public int getDesktopHeight() {
 
 		return containerInternalFrames.getHeight();
 	}
 
+	/**
+	 * Adicionar internal frame.
+	 *
+	 * @param nuevoInternalFrame the nuevo internal frame
+	 */
 	public void adicionarInternalFrame(JInternalFrame nuevoInternalFrame) {
 		add(nuevoInternalFrame);
 	}
 
+	/**
+	 * Iniciar hilo.
+	 */
 	public void iniciarHilo() {
 		ExecutorService hiloCliente = Executors.newFixedThreadPool(1);
 		hiloCliente.execute(this);
-		// Thread hilo = new Thread(this);
-		// hilo.start();
 	}
 
+	/**
+	 * Sets the id yo.
+	 *
+	 * @param id the new id yo
+	 */
 	public void setIdYo(String id) {
 		idYo = id;
 	}
 
+	/**
+	 * Mostrar mensajes.
+	 *
+	 * @param mensaje the mensaje
+	 */
 	private void mostrarMensajes(String mensaje) {
 		System.out.println(mensaje);
 	}
 
+	/**
+	 * Enviar mensaje servidor.
+	 *
+	 * @param mensaje the mensaje
+	 */
 	public void enviarMensajeServidor(String mensaje) {
 		try {
 			out.writeObject(mensaje);
@@ -141,6 +162,11 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		}
 	}
 
+	/**
+	 * Enviar apuesta servidor.
+	 *
+	 * @param apuesta the apuesta
+	 */
 	public void enviarApuestaServidor(int apuesta) {
 		try {
 			out.writeObject(apuesta);
@@ -151,6 +177,9 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		}
 	}
 
+	/**
+	 * Buscar servidor.
+	 */
 	public void buscarServidor() {
 		mostrarMensajes("Jugador buscando al servidor...");
 
@@ -180,6 +209,9 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		iniciarHilo();
 	}
 
+	/**
+	 * Run.
+	 */
 	@Override
 	public void run() {
 		while(repetirRonda) {
@@ -202,7 +234,6 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 
 					ultimoJugador = datosRecibidos.getIdJugadores()[2];
 					capitalUltimoJugador = datosRecibidos.getCapitalJugador3();
-					System.out.println("EL JUGADOR " + idYo + " ESTÁ EN LA POSICIÓN 0");
 					turno = true;
 				} else if (datosRecibidos.getIdJugadores()[1].equals(idYo)) {
 					capitalYo = datosRecibidos.getCapitalJugador2();
@@ -238,16 +269,12 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 					datosRecibidos = (DatosBlackJack) in.readObject();
 					
 					mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
-					mostrarMensajes(datosRecibidos.getJugador() + " " + datosRecibidos.getJugadorEstado());
-					mostrarMensajes("CAPITAL JUGADORES: CLIENTE" + datosRecibidos.getCapitalJugador1() + ", " + datosRecibidos.getCapitalJugador2() + ", " + datosRecibidos.getCapitalJugador3() );
 					ventanaSalaJuego.pintarTurno(datosRecibidos);
-					
-					mostrarMensajes("El booleano enJuego recibido por cliente es " + datosRecibidos.isEnJuego());
-					mostrarMensajes("El mensaje es " + datosRecibidos.getMensaje());
 					
 					if (!datosRecibidos.isEnJuego()) {
 						//Activar el botón de reinicio
 						ventanaSalaJuego.activarBotonOtraRonda(true);
+						
 						break;
 					}
 
@@ -264,6 +291,11 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		}
 	}
 
+	/**
+	 * Habilitar sala juego.
+	 * Método encargado de habilitar la sala de juego, para poder jugar
+	 * @param datosRecibidos the datos recibidos
+	 */
 	private void habilitarSalaJuego(DatosBlackJack datosRecibidos) {
 		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable() {
@@ -284,7 +316,10 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		});
 	}
 
-	//Ajusta la ventana para reiniciar el juego
+	/**
+	 * Reiniciar juego.
+	 * Método encargado de reiniciar el juego, para poder jugar más rondas
+	 */
 	public void reiniciarJuego() {
 		
 		ventanaSalaJuego.cerrarVentanaSalaJuego();
@@ -294,7 +329,12 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		//Avisando al servidor
 		enviarMensajeServidor(idYo);
 	}
-	private void cerrarConexion() {
+	
+	/**
+	 * Cerrar conexion.
+	 * Cierra la conexión con el servidor
+	 */
+	public void cerrarConexion() {
 		// TODO Auto-generated method stub
 		try {
 			in.close();
@@ -307,6 +347,11 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		}
 	}
 
+	/**
+	 * Sets the turno.
+	 *
+	 * @param turno the new turno
+	 */
 	public void setTurno(boolean turno) {
 		this.turno = turno;
 	}

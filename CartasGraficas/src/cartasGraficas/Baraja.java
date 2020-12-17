@@ -8,10 +8,17 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Baraja.
+ */
 public class Baraja {
    private ArrayList<Carta> mazo;
    private Random aleatorio;
    
+   /**
+    * Instantiates a new baraja.
+    */
    public Baraja() {
 	   aleatorio = new Random();
 	   mazo = new ArrayList<Carta>();
@@ -37,6 +44,9 @@ public class Baraja {
 	  
    }
    
+   /**
+    * Asignar imagen.
+    */
    private void asignarImagen() {   
 	   
 	    try {
@@ -56,10 +66,20 @@ public class Baraja {
 		
    }
    
+   /**
+    * Gets the carta.
+    *
+    * @return the carta
+    */
    public Carta getCarta() {
 	   return mazo.get(aleatorio.nextInt(mazoTamano()));
    }
    
+   /**
+    * Mazo tamano.
+    *
+    * @return the int
+    */
    public int mazoTamano() {
 	   return mazo.size();
    }
