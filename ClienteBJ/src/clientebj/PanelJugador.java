@@ -1,5 +1,6 @@
 package clientebj;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -21,22 +23,29 @@ import comunes.FileIO;
 public class PanelJugador extends JPanel {
 	//constantes de clase
 	private static final int ANCHO = 206;
-	private static final int ALTO = 120;
+	private static final int ALTO = 135;
 	
 	
 	//variables para control del graficado
 	private ArrayList<Recuerdo> dibujoRecordar;
 	private int x;
-	private int apuestaJugador;
+	private Titulos capitalJugador;
 	    
-	public PanelJugador(String nombreJugador, int apuestaJugador) {
-		//this.setBackground(Color.GREEN);
-		this.apuestaJugador = apuestaJugador;
+	public PanelJugador(String nombreJugador, int capitalJugador) {
+		this.setBackground(Color.GREEN);
+		String monto = String.valueOf(capitalJugador);
+		this.capitalJugador = new Titulos("Capital: " + monto, 20, Color.YELLOW, Color.BLACK);
+		//this.capitalJugador.setText(String.valueOf(capitalJugador));
+
 		dibujoRecordar = new ArrayList<Recuerdo>();
 		this.setPreferredSize(new Dimension(ANCHO,ALTO));
 		TitledBorder bordes;
-		bordes = BorderFactory.createTitledBorder(nombreJugador + " $"+apuestaJugador);
+		bordes = BorderFactory.createTitledBorder(nombreJugador);
 		this.setBorder(bordes);
+		
+		add(this.capitalJugador,BorderLayout.NORTH);
+		
+		
 	}
 	
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
@@ -60,11 +69,8 @@ public class PanelJugador extends JPanel {
 		g.setFont(font);
 				
 		for(int i=0;i<dibujoRecordar.size();i++) {
-			g.drawImage(dibujoRecordar.get(i).getImagenRecordar(), dibujoRecordar.get(i).getxRecordar(),35, this);
+			g.drawImage(dibujoRecordar.get(i).getImagenRecordar(), dibujoRecordar.get(i).getxRecordar(),50, this);
 		}
-	//	for(Recuerdo carta : dibujoRecordar) {
-		//	g.drawImage(carta.getImagenRecordar(), carta.getxRecordar(),35, this);
-		//}
 	}
 	
 	private class Recuerdo{
@@ -77,17 +83,12 @@ public class PanelJugador extends JPanel {
 		public Recuerdo(Carta cartaRecordar, int xRecordar,Image ImagenRecordar) {
 			this.cartaRecordar = cartaRecordar;
 			this.xRecordar = xRecordar;
-			this.imagenRecordar=imagenRecordar;
 		}
 		public Image getImagenRecordar() {
 			
 			BufferedImage imagenesCartas = FileIO.readImageFile(this, RUTA_FILE);
 			imagenCarta = imagenesCartas.getSubimage(cartaRecordar.getCoordenadaX(), cartaRecordar.getCoordenadaY(), Carta.WIDTH,Carta.HEIGHT);
 			return imagenCarta;
-		}
-
-		public String getCartaRecordar() {
-			return cartaRecordar.toString();
 		}
 		
 		public int getxRecordar() {
