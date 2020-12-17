@@ -41,6 +41,7 @@ public class PanelJugador extends JPanel {
 		this.setPreferredSize(new Dimension(ANCHO,ALTO));
 		TitledBorder bordes;
 		bordes = BorderFactory.createTitledBorder(nombreJugador);
+		//bordes.isBorderOpaque();
 		this.setBorder(bordes);
 		
 		add(this.capitalJugador,BorderLayout.NORTH);

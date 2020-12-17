@@ -32,19 +32,19 @@ public class VentanaSalaJuego extends JInternalFrame {
 	private JPanel panelYo, panelBotones, yoFull, panelDealer, panelJugador2, panelJugador3, panelOtraRonda;
 
 	private String yoId, jugador2Id, jugador3Id;
-	// private DatosBlackJack datosRecibidos;
 	private Escucha escucha;
 
 	public VentanaSalaJuego(String yoId,int apuestaYo, String jugador2Id,int apuesta2, String jugador3Id, int apuesta3, int desktop_Width,int desktop_height) {
 		this.yoId = yoId;
 		this.jugador2Id = jugador2Id;
 		this.jugador3Id = jugador3Id;
-		// this.datosRecibidos=datosRecibidos;
-
+		this.setBackground(Color.GREEN);
+		
 		initGUI(apuestaYo, apuesta2,apuesta3);
 
 		// default window settings
 		this.setTitle("Sala de juego BlackJack - Jugador: " + yoId);
+		
 		this.pack();
 		this.setLocation((desktop_Width/2) - this.getWidth()/2, (desktop_height/2) - this.getHeight()/2);
 		this.setResizable(false);
@@ -63,6 +63,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 		// Set up JComponents
 		panelDealer = new JPanel();
 		dealer = new PanelJugador("Dealer",99999);
+		panelDealer.setBackground(Color.GREEN);
 		panelDealer.add(dealer);
 		constraints.gridx = 1;
 		constraints.gridy = 0;
@@ -70,6 +71,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 		panelJugador2 = new JPanel();
 		jugador2 = new PanelJugador(jugador2Id,apuesta2);
+		panelJugador2.setBackground(Color.GREEN);
 		panelJugador2.add(jugador2);
 		constraints.gridx = 2;
 		constraints.gridy = 1;
@@ -77,6 +79,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 		panelJugador3 = new JPanel();
 		jugador3 = new PanelJugador(jugador3Id,apuesta3);
+		panelJugador3.setBackground(Color.GREEN);
 		panelJugador3.add(jugador3);
 		constraints.gridx = 1;
 		constraints.gridy = 2;
@@ -91,11 +94,13 @@ public class VentanaSalaJuego extends JInternalFrame {
 		bordes.setTitleJustification(TitledBorder.CENTER);
 		scroll.setBorder(bordes);
 		areaMensajes.setOpaque(false);
-		areaMensajes.setBackground(new Color(0, 0, 0, 0));
+		areaMensajes.setBackground(Color.WHITE);
 		areaMensajes.setEditable(false);
 
 		scroll.getViewport().setOpaque(false);
-		scroll.setOpaque(false);
+		//scroll.setOpaque(false);
+		scroll.setBackground(Color.WHITE);
+		
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		add(scroll, constraints);
@@ -103,6 +108,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 		panelYo = new JPanel();
 		panelYo.setLayout(new BorderLayout());
 		yo = new PanelJugador(yoId,apuestaYo);
+		panelYo.setBackground(Color.GREEN);
 		panelYo.add(yo);
 
 		pedir = new JButton("Carta");
@@ -112,11 +118,13 @@ public class VentanaSalaJuego extends JInternalFrame {
 		plantar.setEnabled(false);
 		plantar.addActionListener(escucha);
 		panelBotones = new JPanel();
+		panelBotones.setBackground(Color.GREEN);
 		panelBotones.add(pedir);
 		panelBotones.add(plantar);
 
 		yoFull = new JPanel();
 		yoFull.setPreferredSize(new Dimension(206, 180));
+		yoFull.setBackground(Color.GREEN);
 		yoFull.add(panelYo);
 		yoFull.add(panelBotones);
 		constraints.gridx = 0;
