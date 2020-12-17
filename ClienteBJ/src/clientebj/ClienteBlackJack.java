@@ -49,11 +49,11 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 
 	// variables de control del juego
 	private String idYo, otroJugador, ultimoJugador;
-	private int apuestasYo, apuestasOtroJugador, apuestasUltimoJugador;
+	private int capitalYo, capitalOtroJugador, capitalUltimoJugador;
 	private boolean turno;
 	private DatosBlackJack datosRecibidos;
 	// Apuesta inicial
-	private int apuestaInicial = 10;
+	private int capital=1000;
 
 	// variables para manejar la conexión con el Servidor BlackJack
 	private Socket conexion;
@@ -174,7 +174,8 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		// mandar nombre jugador
 		mostrarMensajes("Jugador envio nombre " + idYo);
 		enviarMensajeServidor(idYo);
-		enviarApuestaServidor(apuestaInicial);
+		capital -= 10;
+		enviarApuestaServidor(capital);
 		// procesar comunicación con el ServidorBlackJack
 		iniciarHilo();
 	}
@@ -194,31 +195,31 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 				
 				// lee los datos con los que construye la mesa
 				if (datosRecibidos.getIdJugadores()[0].equals(idYo)) {
-					apuestasYo = datosRecibidos.getApuestasJugadores()[0];
+					capitalYo = datosRecibidos.getCapitalJugadores()[0];
 
 					otroJugador = datosRecibidos.getIdJugadores()[1];
-					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[1];
+					capitalOtroJugador = datosRecibidos.getCapitalJugadores()[1];
 
 					ultimoJugador = datosRecibidos.getIdJugadores()[2];
-					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
+					capitalUltimoJugador = datosRecibidos.getCapitalJugadores()[2];
 					System.out.println("EL JUGADOR " + idYo + " ESTÁ EN LA POSICIÓN 0");
 					turno = true;
 				} else if (datosRecibidos.getIdJugadores()[1].equals(idYo)) {
-					apuestasYo = datosRecibidos.getApuestasJugadores()[1];
+					capitalYo = datosRecibidos.getCapitalJugadores()[1];
 
 					otroJugador = datosRecibidos.getIdJugadores()[0];
-					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
+					capitalOtroJugador = datosRecibidos.getCapitalJugadores()[0];
 
 					ultimoJugador = datosRecibidos.getIdJugadores()[2];
-					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[2];
+					capitalUltimoJugador = datosRecibidos.getCapitalJugadores()[2];
 				} else { // Yo estoy en la posición 2
-					apuestasYo = datosRecibidos.getApuestasJugadores()[2];
+					capitalYo = datosRecibidos.getCapitalJugadores()[2];
 
 					otroJugador = datosRecibidos.getIdJugadores()[0];
-					apuestasOtroJugador = datosRecibidos.getApuestasJugadores()[0];
+					capitalOtroJugador = datosRecibidos.getCapitalJugadores()[0];
 
 					ultimoJugador = datosRecibidos.getIdJugadores()[1];
-					apuestasUltimoJugador = datosRecibidos.getApuestasJugadores()[1];
+					capitalUltimoJugador = datosRecibidos.getCapitalJugadores()[1];
 
 				}
 
@@ -238,7 +239,7 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 					
 					mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
 					mostrarMensajes(datosRecibidos.getJugador() + " " + datosRecibidos.getJugadorEstado());
-					
+					mostrarMensajes("CAPITAL JUGADORES: CLIENTE" + datosRecibidos.getCapitalJugadores()[0] + ", " + datosRecibidos.getCapitalJugadores()[1] + ", " + datosRecibidos.getCapitalJugadores()[2] );
 					ventanaSalaJuego.pintarTurno(datosRecibidos);
 					
 					mostrarMensajes("El booleano enJuego recibido por cliente es " + datosRecibidos.isEnJuego());
@@ -286,8 +287,8 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 				// TODO Auto-generated method stub
 				ventanaEspera = (VentanaEspera) containerInternalFrames.getComponent(0);
 				ventanaEspera.cerrarSalaEspera();
-				ventanaSalaJuego = new VentanaSalaJuego(idYo, apuestasYo, otroJugador, apuestasOtroJugador,
-						ultimoJugador, apuestasUltimoJugador, getDesktopWidth(), getDesktopHeight());
+				ventanaSalaJuego = new VentanaSalaJuego(idYo, capitalYo, otroJugador, capitalOtroJugador,
+						ultimoJugador, capitalUltimoJugador, getDesktopWidth(), getDesktopHeight());
 				ventanaSalaJuego.pintarCartasInicio(datosRecibidos);
 				adicionarInternalFrame(ventanaSalaJuego);
 				if (turno) {
