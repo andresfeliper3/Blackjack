@@ -248,6 +248,7 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 					if (!datosRecibidos.isEnJuego()) {
 						//Activar el botón de reinicio
 						ventanaSalaJuego.activarBotonOtraRonda(true);
+						break;
 					}
 
 				} catch (ClassNotFoundException e) {
@@ -283,7 +284,9 @@ public class ClienteBlackJack extends JFrame implements Runnable {
 		});
 	}
 
+	//Ajusta la ventana para reiniciar el juego
 	public void reiniciarJuego() {
+		
 		ventanaSalaJuego.cerrarVentanaSalaJuego();
 		ventanaEspera = new VentanaEspera(idYo);
 		add(ventanaEspera);
