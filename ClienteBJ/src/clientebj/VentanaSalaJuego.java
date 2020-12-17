@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,8 +28,8 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 	private PanelJugador dealer, yo, jugador2, jugador3;
 	private JTextArea areaMensajes;
-	private JButton pedir, plantar;
-	private JPanel panelYo, panelBotones, yoFull, panelDealer, panelJugador2, panelJugador3;
+	private JButton pedir, plantar, otraRonda;
+	private JPanel panelYo, panelBotones, yoFull, panelDealer, panelJugador2, panelJugador3, panelOtraRonda;
 
 	private String yoId, jugador2Id, jugador3Id;
 	// private DatosBlackJack datosRecibidos;
@@ -52,7 +54,8 @@ public class VentanaSalaJuego extends JInternalFrame {
 	private void initGUI(int apuestaYo,int apuesta2,int apuesta3) {
 		// TODO Auto-generated method stub
 		// set up JFrame Container y Layout
-
+		setLayout(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
 		// Create Listeners objects
 		escucha = new Escucha();
 		// Create Control objects
@@ -61,17 +64,23 @@ public class VentanaSalaJuego extends JInternalFrame {
 		panelDealer = new JPanel();
 		dealer = new PanelJugador("Dealer",99999);
 		panelDealer.add(dealer);
-		add(panelDealer, BorderLayout.NORTH);
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		add(panelDealer, constraints);
 
 		panelJugador2 = new JPanel();
 		jugador2 = new PanelJugador(jugador2Id,apuesta2);
 		panelJugador2.add(jugador2);
-		add(panelJugador2, BorderLayout.EAST);
+		constraints.gridx = 2;
+		constraints.gridy = 1;
+		add(panelJugador2, constraints);
 
 		panelJugador3 = new JPanel();
 		jugador3 = new PanelJugador(jugador3Id,apuesta3);
 		panelJugador3.add(jugador3);
-		add(panelJugador3, BorderLayout.SOUTH);
+		constraints.gridx = 1;
+		constraints.gridy = 2;
+		add(panelJugador3, constraints);
 
 		areaMensajes = new JTextArea(8, 18);
 		JScrollPane scroll = new JScrollPane(areaMensajes);
@@ -87,7 +96,9 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 		scroll.getViewport().setOpaque(false);
 		scroll.setOpaque(false);
-		add(scroll, BorderLayout.CENTER);
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		add(scroll, constraints);
 
 		panelYo = new JPanel();
 		panelYo.setLayout(new BorderLayout());
@@ -108,7 +119,18 @@ public class VentanaSalaJuego extends JInternalFrame {
 		yoFull.setPreferredSize(new Dimension(206, 180));
 		yoFull.add(panelYo);
 		yoFull.add(panelBotones);
-		add(yoFull, BorderLayout.WEST);
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		add(yoFull, constraints);
+		
+		otraRonda = new JButton("Otra ronda");
+		panelOtraRonda = new JPanel(new BorderLayout());
+		panelOtraRonda.add(otraRonda, BorderLayout.EAST);
+		constraints.gridx = 2;
+		constraints.gridy = 2;
+		constraints.anchor = GridBagConstraints.SOUTHEAST;
+		add(panelOtraRonda, constraints);
+			
 	}
 
 	public void activarBotones(boolean turno) {
